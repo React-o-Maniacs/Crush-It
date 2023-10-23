@@ -1,6 +1,5 @@
 import React from 'react';
 import Image from 'next/image';
-import EmailIcon from '../public/sms.svg';
 
 interface InputProps {
   id: string;
@@ -8,6 +7,8 @@ interface InputProps {
   value: string;
   label: string;
   type?: string;
+  image?: any;
+  alt: string;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -15,12 +16,14 @@ const Input: React.FC<InputProps> = ({
   onChange,
   value,
   label,
-  type
+  type,
+  image,
+  alt
 }) => {
   return (
     <>
-      <div className='flex p-[0px]'>
-        <Image className='rounded-[1.5px] h-6 mr-2' src={EmailIcon} alt="Email Icon" />
+      <div className='flex'>
+        <Image className='rounded-[1.5px] h-6 mr-2' src={image} alt={alt} />
         <label className='text-gray-700 font-size: 0.875rem font-normal' htmlFor={id}>{label}</label>
       </div>
       <div>
