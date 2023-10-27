@@ -38,6 +38,43 @@ const Auth = () => {
         type="confirmPassword"
         value={confirmPassword}
       />
+      <button
+        onClick={() => {
+            {/* For testing */}
+            console.log("Sign Up Clicked");
+          }
+        }
+        style={{
+          fontSize: '18px',
+          width: '270px',
+          height: '60px',
+          top: '582px',
+          left: '922px',
+          borderRadius: '16px',
+          color: '#FFFFFF',
+          background: 'linear-gradient(180deg, #6284FF 0%, #4B6DE9 100%)'
+        }}
+      >
+        Sign up
+      </button>
+      <button
+        onClick={() => {
+            {/* For testing */}
+            console.log("Sign In Clicked");
+          }
+        }
+        style={{
+          display: 'flex',
+          fontSize: '16px',
+          width: '291px',
+          height: '21px',
+          top: '884px',
+          left: '912px',
+          color: '#6284FF'
+        }}
+      >
+        Sign in Here!
+      </button>
     </>
   );
 }
