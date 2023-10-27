@@ -1,6 +1,7 @@
 import Input from "@/components/Input";
 import EmailIcon from '../public/sms.svg';
 import LockIcon from '../public/lock.svg';
+import SignUpIcon from '../public/signup.svg';
 import { useState } from "react";
 
 const Auth = () => {
