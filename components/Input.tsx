@@ -9,6 +9,7 @@ interface InputProps {
   type?: string;
   image?: any;
   alt: string;
+  inputFieldClassName?: string;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -18,7 +19,8 @@ const Input: React.FC<InputProps> = ({
   label,
   type,
   image,
-  alt
+  alt,
+  inputFieldClassName
 }) => {
   return (
     <div className='flex flex-col gap-y-5'>
@@ -27,7 +29,7 @@ const Input: React.FC<InputProps> = ({
         <label className='text-gray-700 text-2xl font-normal' htmlFor={id}>{label}</label>
       </div>
       <div className='flex'>
-        <input className='outline-crush-it-blue rounded hover:rounded-[1px] border border-gray-300 bg-white flex-1'
+      <input className={`outline-crush-it-blue rounded hover:rounded-[1px] border border-gray-300 bg-white ${inputFieldClassName}`}
           id={id}
           onChange={onChange}
           value={value}

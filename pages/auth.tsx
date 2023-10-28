@@ -21,6 +21,7 @@ const Auth = () => {
           <div className="flex bg-white rounded-[10px] flex-1 flex-col p-[10%] space-y-[5%]">
             <h1 className="flex font-bold text-[60px] text-crush-it-black">Sign Up</h1>
             <Input
+              inputFieldClassName="flex-1"
               image={EmailIcon}
               alt="Email Icon"
               label="Email/username"
@@ -30,6 +31,7 @@ const Auth = () => {
               value={email}
             />
             <Input
+              inputFieldClassName="flex-1"
               image={LockIcon}
               alt="Lock Icon"
               label="Password"
@@ -39,6 +41,7 @@ const Auth = () => {
               value={password}
             />
             <Input
+              inputFieldClassName="flex-1"
               image={LockIcon}
               alt="Lock Icon"
               label="Confirm Password"
