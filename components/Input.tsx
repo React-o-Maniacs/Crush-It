@@ -21,20 +21,20 @@ const Input: React.FC<InputProps> = ({
   alt
 }) => {
   return (
-    <>
+    <div className='flex flex-col gap-y-5'>
       <div className='flex'>
-        <Image className='rounded-[1.5px] h-6 mr-2' src={image} alt={alt} />
-        <label className='text-gray-700 font-size: 0.875rem font-normal' htmlFor={id}>{label}</label>
+        <Image className='rounded-[1.5px] mr-2 scale-125' src={image} alt={alt} />
+        <label className='text-gray-700 text-2xl font-normal' htmlFor={id}>{label}</label>
       </div>
-      <div>
-        <input className='outline-crush-it-blue rounded hover:rounded-[1px] border border-gray-300 bg-white'
+      <div className='flex'>
+        <input className='outline-crush-it-blue rounded hover:rounded-[1px] border border-gray-300 bg-white flex-1'
           id={id}
           onChange={onChange}
           value={value}
           type={type}
           placeholder=" " />
       </div>
-    </>
+    </div>
   )
 }
 
