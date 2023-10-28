@@ -1,9 +1,11 @@
+import SideBanner from '@/components/SideBanner';
 import ProfileAvatar from '../components/ProfileAvatar';
 
 const Profile = () => {
     return (
-        <div className='flex-1'>
+        <div>
         <ProfileAvatar name="John Doe" />
+        <SideBanner/>
         </div>
     )
 
