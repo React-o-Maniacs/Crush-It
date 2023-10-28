@@ -10,6 +10,7 @@ const config: Config = {
     extend: {
       colors: {
         'crush-it-blue': '#6284FF',
+        'crush-it-black': '#252628',
       },
     },
   },
