@@ -149,7 +149,11 @@ const Profile = () => {
             </div>
           </div>
         </div>
-        
+
+        <div className="flex justify-center my-20 space-x-4">
+              <button className="h-[60px] w-[270px] bg-white hover:from-sky-500 hover:to-blue-600 text-crush-it-blue text-[18px] font-bold py-2 px-4 rounded-[16px] border border-crush-it-blue ">Cancel</button>
+              <button className="h-[60px] w-[270px] bg-gradient-to-b from-crush-it-blue to-crush-it-blue-g hover:from-sky-500 hover:to-blue-600 text-white text-[18px] font-bold py-2 px-4 rounded-[16px] ">Save</button>
+        </div>
 
 
 
