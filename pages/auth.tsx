@@ -1,14 +1,50 @@
 import Input from "@/components/Input";
 import EmailIcon from '../public/images/sms.svg';
+import ProfileIcon from '../public/images/profile.svg';
 import LockIcon from '../public/images/lock.svg';
 import Image from "next/image";
 import CrushItLogo from '../public/images/crush-it-logo.svg';
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import { signIn } from "next-auth/react";
+import axios from "axios";
 
 const Auth = () => {
   const [email, setEmail] = useState('');
+  const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
+  const [variant, setVariant] = useState('register');
+
+  const toggleVariant = useCallback(() => {
+    setVariant((currentVariant) => currentVariant === 'login' ? 'register' : 'login');
+  }, []);
+
+  const login = useCallback(async () => {
+    try {
+      await signIn('credentials', {
+        email,
+        password,
+        callbackUrl: '/'
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }, [email, password]);
+
+  const register = useCallback(async () => {
+    try {
+      await axios.post('/api/register', {
+        email,
+        userName,
+        password
+      });
+
+      login();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [email, userName, password, login]);
 
   return (
     <div className="flex flex-1">
@@ -22,9 +58,18 @@ const Auth = () => {
             <h1 className="flex font-bold text-[60px] text-crush-it-black">Sign Up</h1>
             <Input
               inputFieldClassName="flex-1"
+              image={ProfileIcon}
+              alt="Profile Icon"
+              label="Username"
+              onChange={(ev: any) => setUserName(ev.target.value)}
+              id="name"
+              value={userName}
+            />
+            <Input
+              inputFieldClassName="flex-1"
               image={EmailIcon}
               alt="Email Icon"
-              label="Email/username"
+              label="Email Address"
               onChange={(ev: any) => setEmail(ev.target.value)}
               id="email"
               type="email"
@@ -51,7 +96,10 @@ const Auth = () => {
               value={confirmPassword}
             />
             <div className="flex justify-center">
-              <button className="h-[60px] w-[270px] bg-gradient-to-b from-crush-it-blue to-crush-it-blue-g hover:from-sky-500 hover:to-blue-600 text-white text-[18px] font-bold py-2 px-4 rounded-[16px] ">Sign Up</button>
+              <button onClick={variant === 'login' ? login : register}
+                className="h-[60px] w-[270px] bg-gradient-to-b from-crush-it-blue to-crush-it-blue-g
+                 hover:from-sky-500 hover:to-blue-600 text-white text-[18px] font-bold py-2 px-4 
+                rounded-[16px] ">Sign Up</button>
             </div>
           </div>
         </div>
