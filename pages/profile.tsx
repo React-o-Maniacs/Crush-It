@@ -5,8 +5,29 @@ import UserImage from "../public/images/profile.svg";
 import Input from "../components/Input";
 import LockImage from '../public/images/lock.svg';
 import TimerIcon from '../public/images/clock.svg';
+import { getSession } from "next-auth/react";
+import { NextPageContext } from "next";
+import useCurrentUser from "@/hooks/useCurrentUser";
+
+export async function getServerSideProps(context: NextPageContext) {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth',
+        permanent: false,
+      }
+    }
+  }
+
+  return {
+    props: {}
+  }
+}
 
 const Profile = () => {
+  const { data: user } = useCurrentUser();
   const [FirstName, setFirstName] = useState("");
   const [LastName, setLastName] = useState("");
   const [currentPassword, setCurrentPassword] = useState('');
@@ -23,7 +44,7 @@ const Profile = () => {
         <div className="bg-white p-4 shadow-md">
           <div className="flex justify-between items-center">
             <h1>Profile</h1>
-            <ProfileAvatar name="John Doe" />
+            <ProfileAvatar name={user?.userName} />
           </div>
         </div>
 
