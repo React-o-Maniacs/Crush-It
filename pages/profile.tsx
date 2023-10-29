@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import UserImage from "../public/images/profile.svg";
 import Input from "../components/Input";
 import LockImage from '../public/images/lock.svg';
+import TimerIcon from '../public/images/clock.svg';
 
 const Profile = () => {
   const [FirstName, setFirstName] = useState("");
@@ -11,6 +12,9 @@ const Profile = () => {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [pomodoroTime, setPomodoroTime] = useState('25'); // default to 25 minutes
+  const [shortBreakTime, setShortBreakTime] = useState('5'); // default to 5 minutes
+  const [longBreakTime, setLongBreakTime] = useState('15'); // default to 15 minutes
 
   return (
     <div className="flex min-h-screen">
@@ -102,6 +106,53 @@ const Profile = () => {
             </div>
           </div>
         </div>
+
+        <h2 className="text-2xl font-semibold mt-9 mx-4">Pomodoro Timer (Minutes)</h2>
+
+        <div className="bg-white p-4 shadow-md my-4 mx-4 rounded-lg">
+          <div className="flex flex-row space-x-4">
+            <div className="flex-1">
+              <Input
+                image={TimerIcon}
+                alt="Pomodoro"
+                label="Pomodoro (minutes)"
+                onChange={(e: any) => setPomodoroTime(e.target.value)}
+                id="pomodoroTime"
+                type="number"
+                value={pomodoroTime}
+                inputFieldClassName="flex-1"
+              />
+            </div>
+            <div className="flex-1">
+              <Input
+                image={TimerIcon}
+                alt="Short Break"
+                label="Short Break (minutes)"
+                onChange={(e: any) => setShortBreakTime(e.target.value)}
+                id="shortBreakTime"
+                type="number"
+                value={shortBreakTime}
+                inputFieldClassName="flex-1"
+              />
+            </div>
+            <div className="flex-1">
+              <Input
+                image={TimerIcon}
+                alt="Long Break"
+                label="Long Break (minutes)"
+                onChange={(e: any) => setLongBreakTime(e.target.value)}
+                id="longBreakTime"
+                type="number"
+                value={longBreakTime}
+                inputFieldClassName="flex-1"
+              />
+            </div>
+          </div>
+        </div>
+        
+
+
+
       </div>
     </div>
   );
