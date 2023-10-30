@@ -101,6 +101,13 @@ const Auth = () => {
                  hover:from-sky-500 hover:to-blue-600 text-white text-[18px] font-bold py-2 px-4 
                 rounded-[16px] ">Sign Up</button>
             </div>
+            {/* href="#" redirects to the current page, localhost:3000/auth
+                change this to redirect to the login page when the page is created */}
+            <div className="flex justify-center">
+              <p className="h-[21px] w-[291px] text-crush-it-black">
+                Already have an account? <a href="#" className="underline text-crush-it-blue hover:to-blue-600">Sign in Here!</a>
+              </p>
+            </div>
           </div>
         </div>
       </div> 
