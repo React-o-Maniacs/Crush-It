@@ -1,5 +1,7 @@
 import { NextPageContext } from "next";
-import { getSession, signOut } from "next-auth/react";
+import { getSession } from "next-auth/react";
+import ProfileAvatar from "../components/ProfileAvatar";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 export async function getServerSideProps(context: NextPageContext) {
   const session = await getSession(context);
@@ -19,10 +21,15 @@ export async function getServerSideProps(context: NextPageContext) {
 }
 
 export default function Home() {
+  const { data: user } = useCurrentUser();
   return (
-    <>
-      <h1 className="text-2xl text-green-500">Hello World</h1>
-      <button className="h-10 w-full bg-black" onClick={() => signOut()}>Sign Out!</button>
-    </>
+    <div className="flex min-h-screen flex-col">
+      <div className="bg-white p-4 shadow-md">
+        <div className="flex justify-between items-center">
+          <h1 className="text-2xl text-green-500">Hello World</h1>
+          <ProfileAvatar name={user?.userName} />
+        </div>
+      </div>
+    </div>
   )
 }
