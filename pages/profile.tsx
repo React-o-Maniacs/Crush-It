@@ -1,6 +1,6 @@
 import SideBanner from "@/components/SideBanner";
 import ProfileAvatar from "../components/ProfileAvatar";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import UserImage from "../public/images/profile.svg";
 import Input from "../components/Input";
 import LockImage from '../public/images/lock.svg';
@@ -8,6 +8,7 @@ import TimerIcon from '../public/images/clock.svg';
 import { getSession } from "next-auth/react";
 import { NextPageContext } from "next";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import { useSession } from "next-auth/react";
 
 export async function getServerSideProps(context: NextPageContext) {
   const session = await getSession(context);
@@ -33,10 +34,43 @@ const Profile = () => {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [pomodoroTime, setPomodoroTime] = useState('25'); // default to 25 minutes
-  const [shortBreakTime, setShortBreakTime] = useState('5'); // default to 5 minutes
-  const [longBreakTime, setLongBreakTime] = useState('15'); // default to 15 minutes
+  const [pomodoroTime, setPomodoroTime] = useState(''); // default to 25 minutes
+  const [shortBreakTime, setShortBreakTime] = useState(''); // default to 5 minutes
+  const [longBreakTime, setLongBreakTime] = useState(''); // default to 15 minutes
 
+  useEffect(() => {
+    if (user) {
+      setPomodoroTime(user.pomodoro?.toString() || '25');
+      setShortBreakTime(user.shortBreak?.toString() || '5');
+      setLongBreakTime(user.longBreak?.toString() || '15');
+    }
+  }, [user]);
+
+  const handleSave = async () => {
+    try {
+      const response = await fetch('/api/pomodoroSettings', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          pomodoro: parseInt(pomodoroTime),
+          shortBreak: parseInt(shortBreakTime),
+          longBreak: parseInt(longBreakTime)
+        }),
+        credentials: 'same-origin'
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Settings saved:', data);
+      } else {
+        console.error('Failed to save settings');
+      }
+    } catch (error) {
+      console.error('Failed to save settings', error);
+    }
+  };
   return (
     <div className="flex min-h-screen">
       <SideBanner />
@@ -172,8 +206,12 @@ const Profile = () => {
         </div>
 
         <div className="flex justify-center my-20 space-x-4">
-              <button className="h-[60px] w-[270px] bg-white hover:from-sky-500 hover:to-blue-600 text-crush-it-blue text-[18px] font-bold py-2 px-4 rounded-[16px] border border-crush-it-blue ">Cancel</button>
-              <button className="h-[60px] w-[270px] bg-gradient-to-b from-crush-it-blue to-crush-it-blue-g hover:from-sky-500 hover:to-blue-600 text-white text-[18px] font-bold py-2 px-4 rounded-[16px] ">Save</button>
+          <button className="h-[60px] w-[270px] bg-white hover:from-sky-500 hover:to-blue-600 text-crush-it-blue text-[18px] font-bold py-2 px-4 rounded-[16px] border border-crush-it-blue ">
+            Cancel
+          </button>
+          <button onClick={handleSave} className="h-[60px] w-[270px] bg-gradient-to-b from-crush-it-blue to-crush-it-blue-g hover:from-sky-500 hover:to-blue-600 text-white text-[18px] font-bold py-2 px-4 rounded-[16px] ">
+            Save
+          </button>
         </div>
 
 
