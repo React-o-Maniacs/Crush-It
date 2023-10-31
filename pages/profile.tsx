@@ -34,10 +34,10 @@ const Profile = () => {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [pomodoroTime, setPomodoroTime] = useState(''); // default to 25 minutes
-  const [shortBreakTime, setShortBreakTime] = useState(''); // default to 5 minutes
-  const [longBreakTime, setLongBreakTime] = useState(''); // default to 15 minutes
-
+  const [pomodoroTime, setPomodoroTime] = useState(user?.pomodoro?.toString() || '25');
+  const [shortBreakTime, setShortBreakTime] = useState(user?.shortBreak?.toString() || '5');
+  const [longBreakTime, setLongBreakTime] = useState(user?.longBreak?.toString() || '15');
+  
   useEffect(() => {
     if (user) {
       setPomodoroTime(user.pomodoro?.toString() || '25');
@@ -46,9 +46,34 @@ const Profile = () => {
     }
   }, [user]);
 
+  const validatePassword = (password: string): string | null => {
+    if (password.length < 12) {
+      return "Password should be at least 12 characters long";
+    }
+  
+    const conditions = [
+      /[A-Z]/.test(password), // Uppercase letter
+      /[a-z]/.test(password), // Lowercase letter
+      /[0-9]/.test(password), // Number
+      /[^A-Za-z0-9]/.test(password) // Special character (no spaces)
+    ];
+  
+    const trueConditions = conditions.filter(Boolean).length;
+    
+    if (trueConditions < 2) {
+      return "Password should meet at least two of the following: include an uppercase letter, a lowercase letter, a number, or a special character (no spaces)";
+    }
+  
+    return null;
+  };
+  
+  
+  
+
   const handleSave = async () => {
     try {
-      const response = await fetch('/api/pomodoroSettings', {
+      // Update pomodoro settings
+      const pomodoroResponse = await fetch('/api/pomodoroSettings', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json'
@@ -60,17 +85,64 @@ const Profile = () => {
         }),
         credentials: 'same-origin'
       });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log('Settings saved:', data);
+  
+      if (pomodoroResponse.ok) {
+        const data = await pomodoroResponse.json();
+        console.log('Pomodoro settings saved:', data);
       } else {
-        console.error('Failed to save settings');
+        console.error('Failed to save pomodoro settings');
+      }
+
+      const validationError = validatePassword(newPassword);
+      if (validationError) {
+        console.error(validationError);
+        return;
+      }
+  
+      // Change password if fields are filled out
+      if (currentPassword && newPassword && confirmPassword) {
+        if (newPassword !== confirmPassword) {
+          console.error('New password and confirm new password do not match');
+          return;
+        }
+        await handleChangePassword();
       }
     } catch (error) {
       console.error('Failed to save settings', error);
     }
   };
+  
+
+  const handleChangePassword = async () => {
+    try {
+      const response = await fetch('/api/changePassword', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          currentPassword,
+          newPassword
+        }),
+        credentials: 'same-origin'
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Password changed successfully:', data);
+        // Optionally, clear the password fields after successful change
+        setCurrentPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+      } else {
+        const data = await response.json();
+        console.error('Failed to change password:', data);
+      }
+    } catch (error) {
+      console.error('Failed to change password', error);
+    }
+  };
+
   return (
     <div className="flex min-h-screen">
       <SideBanner />
@@ -78,7 +150,7 @@ const Profile = () => {
         <div className="bg-white p-4 shadow-md">
           <div className="flex justify-between items-center">
             <h1>Profile</h1>
-            <ProfileAvatar name={user?.email_username} />
+            <ProfileAvatar name={user?.userName} />
           </div>
         </div>
 
