@@ -57,7 +57,7 @@ const Auth = () => {
               inputFieldClassName="flex-1"
               image={EmailIcon}
               alt="Email Icon"
-              label="Email Address / Username"
+              label="Email Address/username"
               onChange={(ev: any) => setEmail_Username(ev.target.value)}
               id="email"
               type="email"
@@ -94,7 +94,7 @@ const Auth = () => {
               <p className="">
                 {variant === 'login' ? 'First time using Crush It? ' : 'Already have an account? '}
                 <span className='text-crush-it-blue underline cursor-pointer' onClick={toggleVariant}>
-                {variant === 'login' ? 'Create an Account!' : 'Sign in Here!'}
+                {variant === 'login' ? 'Create an account!' : 'Sign in Here!'}
                 </span> 
               </p>
             </div>
