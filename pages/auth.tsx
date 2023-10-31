@@ -98,6 +98,15 @@ const Auth = () => {
                 </span> 
               </p>
             </div>
+            {variant === 'login' && (<div className="flex bg-crush-it-grey rounded-[10px] p-5 justify-center items-end">
+              <p className = "">
+                {variant === 'login' ? 'Forgot your password? ' : ''}
+                <span className='text-crush-it-blue underline cursor-pointer' onClick={toggleVariant}>
+                {variant === 'login' ? 'Click Here!' : ''}
+                </span>
+              </p>
+            </div>
+            )}
           </div>
         </div>
       </div> 
