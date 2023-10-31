@@ -29,8 +29,8 @@ export async function getServerSideProps(context: NextPageContext) {
 
 const Profile = () => {
   const { data: user } = useCurrentUser();
-  const [FirstName, setFirstName] = useState("");
-  const [LastName, setLastName] = useState("");
+  const [FirstName, setFirstName] = useState(user?.firstName ? String(user.firstName) : "");
+  const [LastName, setLastName] = useState(user?.lastName ? String(user.lastName) : "");
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -45,6 +45,38 @@ const Profile = () => {
       setLongBreakTime(user.longBreak?.toString() || '15');
     }
   }, [user]);
+
+
+  
+  const updateUserInfo = async () => {
+    try {
+      const response = await fetch('/api/updateUserInfo', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          firstName: FirstName || "",
+          lastName: LastName || ""
+        }),
+        credentials: 'same-origin'
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        console.log('User info updated successfully:', data);
+      } else {
+        const data = await response.json();
+        console.error('Failed to update user info:', data);
+      }
+    } catch (error) {
+      console.error('Failed to update user info', error);
+    }
+  };
+  
+  
+  
+  
 
   const validatePassword = (password: string): string | null => {
     if (password.length < 12) {
@@ -72,6 +104,9 @@ const Profile = () => {
 
   const handleSave = async () => {
     try {
+
+      
+      await updateUserInfo();
       // Update pomodoro settings
       const pomodoroResponse = await fetch('/api/pomodoroSettings', {
         method: 'PATCH',
@@ -150,7 +185,13 @@ const Profile = () => {
         <div className="bg-white p-4 shadow-md">
           <div className="flex justify-between items-center">
             <h1>Profile</h1>
-            <ProfileAvatar name={user?.userName} />
+            <ProfileAvatar
+  name={
+    (user?.firstName && user?.lastName)
+      ? `${user.firstName} ${user.lastName}`.trim()
+      : user?.userName || ""
+  }
+/>
           </div>
         </div>
 
