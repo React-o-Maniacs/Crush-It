@@ -46,6 +46,30 @@ const Profile = () => {
     }
   }, [user]);
 
+  const validatePassword = (password: string): string | null => {
+    if (password.length < 12) {
+      return "Password should be at least 12 characters long";
+    }
+  
+    const conditions = [
+      /[A-Z]/.test(password), // Uppercase letter
+      /[a-z]/.test(password), // Lowercase letter
+      /[0-9]/.test(password), // Number
+      /[^A-Za-z0-9]/.test(password) // Special character (no spaces)
+    ];
+  
+    const trueConditions = conditions.filter(Boolean).length;
+    
+    if (trueConditions < 2) {
+      return "Password should meet at least two of the following: include an uppercase letter, a lowercase letter, a number, or a special character (no spaces)";
+    }
+  
+    return null;
+  };
+  
+  
+  
+
   const handleSave = async () => {
     try {
       // Update pomodoro settings
@@ -67,6 +91,12 @@ const Profile = () => {
         console.log('Pomodoro settings saved:', data);
       } else {
         console.error('Failed to save pomodoro settings');
+      }
+
+      const validationError = validatePassword(newPassword);
+      if (validationError) {
+        console.error(validationError);
+        return;
       }
   
       // Change password if fields are filled out
