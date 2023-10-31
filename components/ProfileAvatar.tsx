@@ -31,7 +31,7 @@ const ProfileAvatar: React.FC<ProfileAvatarProps> = ({ name }) => {
             objectFit="cover"
           />
         </div>
-        <label className="text-gray-700 text-sm font-normal ml-2">{user?.email}</label>
+        <label className="text-gray-700 text-sm font-normal ml-2">{user?.firstName && user?.lastName ? `${user.firstName} ${user.lastName}` : user?.email}</label>
       </div>
 
       <div className="absolute top-full mt-2 right-0 bg-white shadow-md rounded-md py-2 w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-300 z-10">
