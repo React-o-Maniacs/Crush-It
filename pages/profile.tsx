@@ -78,7 +78,7 @@ const Profile = () => {
         <div className="bg-white p-4 shadow-md">
           <div className="flex justify-between items-center">
             <h1>Profile</h1>
-            <ProfileAvatar name={user?.userName} />
+            <ProfileAvatar name={user?.email_username} />
           </div>
         </div>
 

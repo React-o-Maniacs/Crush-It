@@ -27,7 +27,7 @@ export default function Home() {
       <div className="bg-white p-4 shadow-md">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl text-green-500">Hello World</h1>
-          <ProfileAvatar name={user?.userName} />
+          <ProfileAvatar name={user?.email_username} />
         </div>
       </div>
     </div>

@@ -12,7 +12,8 @@ const config: Config = {
         'crush-it-blue': '#6284FF',
         'crush-it-black': '#252628',
         'crush-it-line': '#3E3F42',
-        'crush-it-blue-g': '#4B6DE9'
+        'crush-it-blue-g': '#4B6DE9',
+        'crush-it-grey': '#F5F7F9'
       },
     },
   },

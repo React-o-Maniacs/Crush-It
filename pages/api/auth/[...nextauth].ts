@@ -26,7 +26,7 @@ export const authOptions: AuthOptions = {
 
         const user = await prismadb.user.findUnique({
           where: {
-            email: credentials.email
+            email_username: credentials.email
           }
         });
 
