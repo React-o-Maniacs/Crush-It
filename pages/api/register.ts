@@ -8,11 +8,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const { email_username, password } = req.body;
+    const { email, password } = req.body;
+    
+    if(!email || !password){
+      throw new Error('Email and password required');
+    }
 
     const existingUser = await prismadb.user.findUnique({
       where: {
-        email_username,
+        email,
       }
     });
 
@@ -20,11 +24,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(422).json({ error: 'Email taken' });
     }
 
+
+
     const hashedPassword = await bcrypt.hash(password, 12);
 
     const user = await prismadb.user.create({
       data: {
-        email_username,
+        email,
         firstName: '',
         lastName: '',
         hashedPassword,

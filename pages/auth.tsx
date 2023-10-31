@@ -8,7 +8,7 @@ import { signIn } from "next-auth/react";
 import axios from "axios";
 
 const Auth = () => {
-  const [email_username, setEmail_Username] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -21,19 +21,19 @@ const Auth = () => {
   const login = useCallback(async () => {
     try {
       await signIn('credentials', {
-        email_username,
+        email,
         password,
         callbackUrl: '/'
       });
     } catch (error) {
       console.log(error);
     }
-  }, [email_username, password]);
+  }, [email, password]);
 
   const register = useCallback(async () => {
     try {
       await axios.post('/api/register', {
-        email_username,
+        email,
         password
       });
 
@@ -41,7 +41,7 @@ const Auth = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [email_username, password, login]);
+  }, [email, password, login]);
 
   return (
     <div className="flex">
@@ -58,10 +58,10 @@ const Auth = () => {
               image={EmailIcon}
               alt="Email Icon"
               label="Email/username"
-              onChange={(ev: any) => setEmail_Username(ev.target.value)}
+              onChange={(ev: any) => setEmail(ev.target.value)}
               id="email"
               type="email"
-              value={email_username}
+              value={email}
             />
             <Input
               inputFieldClassName="flex-1"

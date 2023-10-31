@@ -10,7 +10,7 @@ export const authOptions: AuthOptions = {
       id: 'credentials',
       name: 'Credentials',
       credentials: {
-        email_username: {
+        email: {
           label: 'Email',
           type: 'text',
         },
@@ -20,13 +20,13 @@ export const authOptions: AuthOptions = {
         }
       },
       async authorize(credentials) {
-        if (!credentials?.email_username || !credentials?.password) {
+        if (!credentials?.email || !credentials?.password) {
           throw new Error('Email and password required');
         }
 
         const user = await prismadb.user.findUnique({
           where: {
-            email_username: credentials.email_username
+            email: credentials.email
           }
         });
 
