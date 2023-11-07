@@ -28,11 +28,11 @@ export async function getServerSideProps(context: NextPageContext) {
 export default function Home() {
   const { data: user } = useCurrentUser();
 
-  const options = ['Option 1', 'Option 2', 'Option 3'];
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const monthsOptions = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const [selectedMonthOption, setSelectedMonthOption] = useState<string | null>(null);
 
-  const handleSelect = (option: string) => {
-    setSelectedOption(option);
+  const handleMonthSelect = (option: string) => {
+    setSelectedMonthOption(option);
   };
 
  return (
@@ -44,27 +44,27 @@ export default function Home() {
             <ProfileAvatar name={(user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}`.trim() : user?.userName || ""}/>
           </div>
         </div>
-        <div className="flex bg-crush-it-blue bg-opacity-[15%] rounded-[10px] m-4 p-4 justify-center">
-          <button className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-4">
-              <Image className='scale-150' src={ArrowIcon} alt="Arrow Icon" />
+        <div className="flex bg-crush-it-blue bg-opacity-[15%] rounded-[10px] m-4 p-3 justify-center">
+          <button className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3">
+              <Image className='scale-125' src={ArrowIcon} alt="Arrow Icon" />
           </button>
-           <div className="container mx-auto p-4">
-            <Dropdown defaultLabel='Month' options={options} onSelect={handleSelect} />
+           <div className="flex w-[200px] ml-2">
+            <Dropdown defaultLabel='Month' options={monthsOptions} onSelect={handleMonthSelect} />
           </div>
-          <button className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-4 ml-2">
-              <Image className='scale-150 rotate-180' src={ArrowIcon} alt="Arrow Icon" />
+          <button className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-2">
+              <Image className='scale-125 rotate-180' src={ArrowIcon} alt="Arrow Icon" />
           </button>
-          <button className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-4 ml-6">
-              <Image className='scale-150' src={ArrowIcon} alt="Arrow Icon" />
+          <button className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-6">
+              <Image className='scale-125' src={ArrowIcon} alt="Arrow Icon" />
           </button>
-          <button className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-4 ml-2">
-              <Image className='scale-150 rotate-180' src={ArrowIcon} alt="Arrow Icon" />
+          <button className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-2">
+              <Image className='scale-125 rotate-180' src={ArrowIcon} alt="Arrow Icon" />
           </button>
-          <button className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-4 ml-6">
-              <Image className='scale-150' src={ArrowIcon} alt="Arrow Icon" />
+          <button className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-6">
+              <Image className='scale-125' src={ArrowIcon} alt="Arrow Icon" />
           </button>
-          <button className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-4 ml-2">
-              <Image className='scale-150 rotate-180' src={ArrowIcon} alt="Arrow Icon" />
+          <button className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-2">
+              <Image className='scale-125 rotate-180' src={ArrowIcon} alt="Arrow Icon" />
           </button>
         </div>
       </div>

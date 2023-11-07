@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import ArrowIcon from '../public/images/arrow.svg';
+import ArrowHollowIcon from '../public/images/arrow-hollow.svg';
 import Image from 'next/image';
 
 interface DropdownProps {
@@ -37,17 +37,17 @@ const Dropdown: React.FC<DropdownProps> = ({ defaultLabel, options, onSelect }) 
   };
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className="flex flex-1" ref={dropdownRef}>
       <button
-        className="flex w-full py-2 px-4 bg-gray-200 rounded border border-gray-300 text-left"
+        className="flex flex-1 rounded-[10px] border border-crush-it-blue p-3 text-left"
         onClick={toggleDropdown}
       >
         {selectedOption || defaultLabel}
-        <Image className='scale-150' src={ArrowIcon} alt="Arrow Icon" />
+        <Image className='flex scale-125 ml-2 self-center' src={ArrowHollowIcon} alt="Arrow Hollow Icon" />
       </button>
       
       {isOpen && (
-        <div className="absolute mt-1 w-full bg-white border border-gray-300 shadow-md z-10">
+        <div className="absolute mt-1 w-full bg-white border border-crush-it-blue shadow-md z-10 rounded-[5px] p-2">
           <ul>
             {options.map((option) => (
               <li
