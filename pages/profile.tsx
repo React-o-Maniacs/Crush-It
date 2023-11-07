@@ -98,14 +98,9 @@ const Profile = () => {
   
     return null;
   };
-  
-  
-  
 
   const handleSave = async () => {
     try {
-
-      
       await updateUserInfo();
       // Update pomodoro settings
       const pomodoroResponse = await fetch('/api/pomodoroSettings', {
@@ -185,18 +180,10 @@ const Profile = () => {
         <div className="bg-white p-4 shadow-md">
           <div className="flex justify-between items-center">
             <h1>Profile</h1>
-            <ProfileAvatar
-  name={
-    (user?.firstName && user?.lastName)
-      ? `${user.firstName} ${user.lastName}`.trim()
-      : user?.userName || ""
-  }
-/>
+            <ProfileAvatar name={(user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}`.trim() : user?.userName || ""}/>
           </div>
         </div>
-
         <h2 className="text-2xl font-semibold mt-9 mx-4">User Info</h2>
-
         <div className="bg-white p-4 shadow-md my-4 mx-4 rounded-lg">
           <div className="flex space-x-4">
             <div className="flex-1">
@@ -225,9 +212,7 @@ const Profile = () => {
             </div>
           </div>
         </div>
-
         <h2 className="text-2xl font-semibold mt-9 mx-4">Change Password</h2>
-
         <div className="bg-white p-4 shadow-md my-4 mx-4 rounded-lg">
           <div className="flex flex-row space-x-4">
             <div className="flex-1">
@@ -274,9 +259,7 @@ const Profile = () => {
             </div>
           </div>
         </div>
-
         <h2 className="text-2xl font-semibold mt-9 mx-4">Pomodoro Timer (Minutes)</h2>
-
         <div className="bg-white p-4 shadow-md my-4 mx-4 rounded-lg">
           <div className="flex flex-row space-x-4">
             <div className="flex-1">
@@ -317,7 +300,6 @@ const Profile = () => {
             </div>
           </div>
         </div>
-
         <div className="flex justify-center my-20 space-x-4">
           <button className="h-[60px] w-[270px] bg-white hover:from-sky-500 hover:to-blue-600 text-crush-it-blue text-[18px] font-bold py-2 px-4 rounded-[16px] border border-crush-it-blue ">
             Cancel
@@ -326,9 +308,6 @@ const Profile = () => {
             Save
           </button>
         </div>
-
-
-
       </div>
     </div>
   );
