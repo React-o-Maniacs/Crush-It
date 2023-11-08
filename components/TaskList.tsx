@@ -9,9 +9,9 @@ const TaskList: React.FC<TaskListProps> = ({ priority }) => {
   // This is where you'd fetch tasks based on priority
   // For now, we'll use dummy data
   const tasks = [
-    { id: 1, title: 'Top Priority Task', priority: 'Top Priority' },
-    { id: 2, title: 'Important Priority Task',priority: 'Important' },
-    { id: 3, title: 'Other Priority Task', priority: 'Other' },
+    { id: 1, title: 'Top Priority Task', status: 'notStarted', priority: 'Top Priority' },
+    { id: 2, title: 'Important Priority Task', status: 'inProgress', priority: 'Important' },
+    { id: 3, title: 'Other Priority Task', status: 'rolledOver', priority: 'Other' },
 
     // Add more dummy tasks with different priorities
   ];
