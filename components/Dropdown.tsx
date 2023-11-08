@@ -6,9 +6,10 @@ interface DropdownProps {
   defaultLabel: string;
   options: string[];
   onSelect: (selectedOption: string) => void;
+  widthStyle?: string;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ defaultLabel, options, onSelect }) => {
+const Dropdown: React.FC<DropdownProps> = ({ defaultLabel, options, onSelect, widthStyle }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
@@ -37,22 +38,26 @@ const Dropdown: React.FC<DropdownProps> = ({ defaultLabel, options, onSelect }) 
   };
 
   return (
-    <div className="flex flex-1" ref={dropdownRef}>
+    <div className="relative" ref={dropdownRef}>
       <button
-        className="flex flex-1 rounded-[10px] border border-crush-it-blue p-3 text-left"
+        className={`flex items-center rounded-[10px] border border-crush-it-blue p-2 px-3 text-left text-[22px] font-bold ${widthStyle}`}
         onClick={toggleDropdown}
       >
-        {selectedOption || defaultLabel}
-        <Image className='flex scale-125 ml-2 self-center' src={ArrowHollowIcon} alt="Arrow Hollow Icon" />
+        <span className="flex-1">{selectedOption || defaultLabel}</span>
+        <Image
+          className={`scale-125 transition-transform transform ${isOpen ? 'rotate-180' : 'rotate-0'}`}
+          src={ArrowHollowIcon}
+          alt="Arrow Hollow Icon"
+        />
       </button>
       
       {isOpen && (
-        <div className="absolute mt-1 w-full bg-white border border-crush-it-blue shadow-md z-10 rounded-[5px] p-2">
+        <div className={`absolute bg-white border border-crush-it-blue shadow-md z-10 rounded-[5px] p-2 ${options.length > 5 ? 'max-h-72 overflow-y-auto w-full' : 'w-full'}`}>
           <ul>
             {options.map((option) => (
               <li
                 key={option}
-                className="cursor-pointer p-2 hover:bg-gray-100"
+                className="cursor-pointer p-2 hover:bg-crush-it-blue rounded-[5px]"
                 onClick={() => handleOptionClick(option)}
               >
                 {option}
