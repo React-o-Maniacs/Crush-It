@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Image, { StaticImageData } from 'next/image';
+import moveImage from "../public/images/Drag.svg";
 import rightArrow from "../public/images/rightarrow.svg";
 import downArrow from "../public/images/downarrow.svg";
 import notStartedIcon from "../public/images/completeIcon.svg";
@@ -65,6 +66,12 @@ const Task: React.FC<TaskProps> = ({ task }) => {
           />
         </button>
         <span className={`flex-1 ${status === 'complete' ? 'line-through' : ''}`}>{task.title}</span>
+        <button className="p-2 ml-2 rounded">
+          <Image
+            src={moveImage}
+            alt="Move Task"
+          />
+        </button>
         <button onClick={handleToggleExpand} className="p-2 rounded">
           <Image
             src={isExpanded ? downArrow : rightArrow}
