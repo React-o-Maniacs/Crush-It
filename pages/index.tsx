@@ -10,7 +10,6 @@ import Dropdown from "@/components/Dropdown";
 
 function getDaysInMonth(month: number): number[] {
   const maxDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-  
   if (month < 1 || month > 12) {
     throw new Error("Invalid month value. Month should be between 1 and 12.");
   }
@@ -39,7 +38,10 @@ export default function Home() {
   const { data: user } = useCurrentUser();
 
   const monthsOptions = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  const [selectedMonthOption, setSelectedMonthOption] = useState<string>('');
+
+  const currentDate = new Date();
+  const currentMonth = monthsOptions[currentDate.getMonth()];
+  const [selectedMonthOption, setSelectedMonthOption] = useState<string>(currentMonth);
 
   const handleMonthSelect = (option: string) => {
     setSelectedMonthOption(option);
@@ -49,46 +51,19 @@ export default function Home() {
     ? getDaysInMonth(monthsOptions.indexOf(selectedMonthOption) + 1).map(String)
     : getDaysInMonth(monthsOptions.indexOf("January") + 1).map(String);
 
-  const [selectedDayOption, setSelectedDayOption] = useState<string>('');
+  const currentDay = currentDate.getDate().toString();
+  const [selectedDayOption, setSelectedDayOption] = useState<string>(currentDay);
 
   const handleDaySelect = (option: string) => {
     setSelectedDayOption(option);
   };
 
-  const currentYear = new Date().getFullYear();
+  const currentYear = currentDate.getFullYear();
   const yearsOptions = Array.from({ length: 5 }, (_, index) => (currentYear + index).toString());
-  const [selectedYearOption, setSelectedYearOption] = useState<string>('');
+  const [selectedYearOption, setSelectedYearOption] = useState<string>(currentYear.toString());
 
   const handleYearSelect = (option: string) => {
     setSelectedYearOption(option);
-  };
-
-  useEffect(() => {
-    if (selectedMonthOption) {
-      const maxDays = getDaysInMonth(monthsOptions.indexOf(selectedMonthOption) + 1).length;
-      if (selectedDayOption && parseInt(selectedDayOption) > maxDays) {
-        setSelectedDayOption('');
-      }
-    }
-  }, [selectedMonthOption, selectedDayOption, monthsOptions]);
-
-  const handleIncrementDay = () => {
-    if (selectedDayOption) {
-      const maxDays = getDaysInMonth(monthsOptions.indexOf(selectedMonthOption) + 1).length;
-      const newDay = parseInt(selectedDayOption) + 1;
-      if (newDay <= maxDays) {
-        setSelectedDayOption(newDay.toString());
-      }
-    }
-  };
-
-  const handleDecrementDay = () => {
-    if (selectedDayOption) {
-      const newDay = parseInt(selectedDayOption) - 1;
-      if (newDay >= 1) {
-        setSelectedDayOption(newDay.toString());
-      }
-    }
   };
 
   return (
@@ -105,25 +80,25 @@ export default function Home() {
               <Image className='scale-125' src={ArrowIcon} alt="Arrow Icon" />
           </button>
           <div className="flex ml-2">
-            <Dropdown defaultLabel='Month' options={monthsOptions} onSelect={handleMonthSelect} widthStyle="w-[200px]" />
+            <Dropdown placeholder={currentMonth} options={monthsOptions} onSelect={handleMonthSelect} widthStyle="w-[200px]" />
           </div>
           <button className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-2">
               <Image className='scale-125 rotate-180' src={ArrowIcon} alt="Arrow Icon" />
           </button>
-          <button onClick={handleDecrementDay} className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-6">
+          <button className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-6">
               <Image className='scale-125' src={ArrowIcon} alt="Arrow Icon" />
           </button>
           <div className="flex ml-2">
-            <Dropdown defaultLabel='Day' options={daysOptions} onSelect={handleDaySelect} widthStyle="w-[100px]" />
+            <Dropdown placeholder={currentDay} options={daysOptions} onSelect={handleDaySelect} widthStyle="w-[100px]" />
           </div>
-          <button onClick={handleIncrementDay} className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-2">
+          <button className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-2">
             <Image className='scale-125 rotate-180' src={ArrowIcon} alt="Arrow Icon" />
           </button>
           <button className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-6">
               <Image className='scale-125' src={ArrowIcon} alt="Arrow Icon" />
           </button>
           <div className="flex ml-2">
-            <Dropdown defaultLabel='Year' options={yearsOptions} onSelect={handleYearSelect} widthStyle="w-[115px]" />
+            <Dropdown placeholder={currentYear.toString()} options={yearsOptions} onSelect={handleYearSelect} widthStyle="w-[115px]" />
           </div>
           <button className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-2">
             <Image className='scale-125 rotate-180' src={ArrowIcon} alt="Arrow Icon" />
