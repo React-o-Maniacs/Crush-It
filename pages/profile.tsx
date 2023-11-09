@@ -74,10 +74,6 @@ const Profile = () => {
     }
   };
   
-  
-  
-  
-
   const validatePassword = (password: string): string | null => {
     if (password.length < 12) {
       return "Password should be at least 12 characters long";
