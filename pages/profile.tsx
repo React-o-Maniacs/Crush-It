@@ -46,8 +46,6 @@ const Profile = () => {
     }
   }, [user]);
 
-
-  
   const updateUserInfo = async () => {
     try {
       const response = await fetch('/api/updateUserInfo', {
@@ -73,7 +71,7 @@ const Profile = () => {
       console.error('Failed to update user info', error);
     }
   };
-  
+
   const validatePassword = (password: string): string | null => {
     if (password.length < 12) {
       return "Password should be at least 12 characters long";
@@ -137,7 +135,6 @@ const Profile = () => {
       console.error('Failed to save settings', error);
     }
   };
-  
 
   const handleChangePassword = async () => {
     try {

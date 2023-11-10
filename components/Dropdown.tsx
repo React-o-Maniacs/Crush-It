@@ -3,13 +3,13 @@ import ArrowHollowIcon from '../public/images/arrow-hollow.svg';
 import Image from 'next/image';
 
 interface DropdownProps {
-  defaultLabel: string;
+  placeholder: string;
   options: string[];
   onSelect: (selectedOption: string) => void;
   widthStyle?: string;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ defaultLabel, options, onSelect, widthStyle }) => {
+const Dropdown: React.FC<DropdownProps> = ({ placeholder, options, onSelect, widthStyle }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
@@ -43,7 +43,7 @@ const Dropdown: React.FC<DropdownProps> = ({ defaultLabel, options, onSelect, wi
         className={`flex items-center rounded-[10px] border border-crush-it-blue p-2 px-3 text-left text-[22px] font-bold ${widthStyle}`}
         onClick={toggleDropdown}
       >
-        <span className="flex-1">{selectedOption || defaultLabel}</span>
+        <span className="flex-1">{selectedOption || placeholder}</span>
         <Image
           className={`scale-125 transition-transform transform ${isOpen ? 'rotate-180' : 'rotate-0'}`}
           src={ArrowHollowIcon}
