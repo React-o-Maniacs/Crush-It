@@ -23,15 +23,17 @@ describe('Profile Page UI', () => {
         expect(changePasswordTitle).toBeInTheDocument()
         expect(pomodoroTimerTitle).toBeInTheDocument()
     })
-    it('Should have profile section title UI elements', () => {
+    it('Should have profile section button UI elements', () => {
         // Arrange
         render(<Profile />)
 
         // Actions
-        const firstNameInputComponent = screen.getByTestId('Input')
+        const cancelButton = screen.getByRole('button', {name: 'Cancel'})
+        const saveButton = screen.getByRole('button', {name: 'Save'})
 
         // Assertions
-        expect(firstNameInputComponent).toBeInTheDocument()
+        expect(cancelButton).toBeInTheDocument()
+        expect(saveButton).toBeInTheDocument()
 
     })
 })
