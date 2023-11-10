@@ -45,9 +45,6 @@ const ProfileAvatar: React.FC<ProfileAvatarProps> = ({ name }) => {
         {/* Invisible bridge */}
         <div className="absolute right-0 h-2 w-full bg-transparent top-full group-hover:h-8"></div>
     </div>
-
-
-
   );
 };
 
