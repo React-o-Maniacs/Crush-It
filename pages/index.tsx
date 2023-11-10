@@ -36,6 +36,8 @@ export async function getServerSideProps(context: NextPageContext) {
 
 export default function Home() {
   const { data: user } = useCurrentUser();
+  const priorities = ['Top Priority', 'Important', 'Other'];
+
 
   const monthsOptions = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -103,6 +105,24 @@ export default function Home() {
           <button className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-2">
             <Image className='scale-125 rotate-180' src={ArrowIcon} alt="Arrow Icon" />
           </button>
+        </div>
+        <div className="container p-4">
+        <h1 className="text-4xl font-bold mb-2">Tasks</h1>
+          <div className="flex">
+            {/* Tasks Section with white container */}
+            <div className="flex-1 bg-white shadow rounded-lg p-4">
+            {priorities.map(priority => (
+                <div key={priority} className="bg-crush-it-grey p-4 my-6 rounded">
+                  <h3 className="text-xl font-bold mb-2">{priority}</h3>
+                    {/* Tasks go here in future */}
+                  </div>
+            ))}
+            </div>
+            {/* Appointments Section placeholder */}
+            <div className="flex-1">
+              {/* Appointment components will go here later */}
+            </div>
+          </div>
         </div>
       </div>
     </div>
