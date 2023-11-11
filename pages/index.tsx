@@ -53,7 +53,7 @@ export default function Home() {
 
   const daysOptions = selectedMonthOption
     ? getDaysInMonth(monthsOptions.indexOf(selectedMonthOption) + 1).map(String)
-    : getDaysInMonth(monthsOptions.indexOf(currentMonth) + 1).map(String);
+    : getDaysInMonth(monthsOptions.indexOf("January") + 1).map(String);
 
   const currentDay = currentDate.getDate().toString();
   const [selectedDayOption, setSelectedDayOption] = useState<string>(currentDay);
@@ -70,7 +70,8 @@ export default function Home() {
     setSelectedYearOption(option);
   };
 
-  const [showCreateTaskModal, setShowCreateTaskModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const date = `${monthsOptions.indexOf(selectedMonthOption) + 1}/${selectedDayOption}/${selectedYearOption}`;
 
   return (
     <>
@@ -113,11 +114,11 @@ export default function Home() {
             </button>
           </div>
           <div className="container p-4">
-        <div className="flex items-center">
+        <div className="flex items-center mb-4">
           <h1 className="text-4xl font-bold mb-2">Tasks</h1>
           <button
             className="border-3 border-solid border-white p-2"
-            onClick={() => setShowCreateTaskModal(true)}
+            onClick={() => setShowModal(true)}
           >
             <Image src={AddTaskIcon} alt="Add Task Icon" />
           </button>
@@ -138,8 +139,8 @@ export default function Home() {
           </div>
         </div>
       </div>
-      {showCreateTaskModal && (
-        <CreateTaskModal isVisible={showCreateTaskModal} onClose={() => setShowCreateTaskModal(false)} />
+      {showModal && (
+        <CreateTaskModal isVisible={showModal} onClose={() => setShowModal(false)} date={date} />
       )}
         </div>
       </div>

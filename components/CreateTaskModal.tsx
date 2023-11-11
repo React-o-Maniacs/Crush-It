@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 
-interface CreateTaskModalProps {
+
+interface TaskModalProps {
   isVisible: boolean;
   onClose: () => void;
+  date: string;
 }
 
-const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isVisible, onClose }) => {
+const CreateTaskModal: React.FC<TaskModalProps> = ({ isVisible, onClose, date }) => {
   const [title, setTaskTitle] = useState<string>('');
-  const [numOfPomodoroTimers, setPomodoro] = useState<number>(0);
+  const [numOfPomodoroTimers, setPomodoro] = useState<number>(1);
   const [notes, setNotes] = useState<string>('');
   const [priority, setPriority] = useState<string>('');
 
@@ -22,6 +25,22 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isVisible, onClose })
 
   const handleCreateTask = async () => {
     try {
+      
+      if (!title) {
+        toast.error('Please put a title.')
+        return;
+      }
+      
+      if (!notes) {
+        toast.error('Please leave a note')
+        return;
+      }
+
+      if (!priority) {
+        toast.error('Please select a priority.')
+        return;
+      }
+
       const taskResponse = await fetch('/api/createTask', {
         method: 'POST',
         headers: {
@@ -32,18 +51,22 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isVisible, onClose })
           numOfPomodoroTimers,
           notes,
           priority,
+          date
         }),
       });
   
       if (taskResponse.ok) {
         const data = await taskResponse.json();
+        toast.success('Task created successfully');
         console.log('Task created successfully:', data);
       } else {
+        toast.error('Failed to create task.');
         console.error('Failed to create task:', taskResponse);
       }
   
       onClose();
     } catch (error) {
+      toast.error('Failed to create task.');
       console.error('Failed to create task', error);
     }
   };
@@ -56,9 +79,9 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isVisible, onClose })
       onClick={handleClose}
     >
       <div className="w-[600px] flex flex-col">
-        <div className="bg-white p-6 rounded-[5px] border-crush-it-blue border-2">
+        <div className="bg-white p-2 rounded">
           <h2>
-            <span className='text-1 font-bold'>Create Task</span>
+            <span style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>Create Task</span>
           </h2>
 
           <div className="my-2 flex items-center">
@@ -68,7 +91,8 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isVisible, onClose })
                 type="text"
                 value={title}
                 onChange={(e) => setTaskTitle(e.target.value)}
-                className='ml-2 outline-crush-it-blue hover:rounded-[1px] border-gray-400 border-[1px] rounded-[2px] p-2 text-1'
+                style={{ border: '1px solid #ccc', padding: '0.5rem', borderRadius: '4px' }}
+                required
               />
             </div>
 
@@ -77,8 +101,8 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isVisible, onClose })
               <input
                 type="number"
                 value={numOfPomodoroTimers < 0 ? 0 : numOfPomodoroTimers}
-                onChange={(e) => setPomodoro(Math.max(0, Number(e.target.value)))}
-                className='ml-2 outline-crush-it-blue hover:rounded-[1px] border-gray-400 border-[1px] rounded-[2px] p-2 text-1 w-16'
+                onChange={(e) => setPomodoro(Math.max(1, Number(e.target.value)))}
+                style={{ border: '1px solid #ccc', padding: '0.5rem', borderRadius: '4px', width: '4em' }}
               />
             </div>
           </div>
@@ -90,7 +114,7 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isVisible, onClose })
               onChange={(e) => setNotes(e.target.value)}
               rows={5}
               style={{ border: '1px solid #ccc', padding: '0.5rem', borderRadius: '4px', width: '100%' }}
-              className='outline-crush-it-blue hover:rounded-[1px] border-gray-400 border-[1px] rounded-[2px] p-2 text-1 w-full'
+              required
             />
           </div>
 
@@ -99,7 +123,7 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isVisible, onClose })
             <select
               value={priority}
               onChange={(e) => setPriority(e.target.value)}
-              className='ml-2 border-gray-400 border-[1px] rounded-[4px] p-2'
+              style={{ border: '1px solid #ccc', padding: '0.5rem', borderRadius: '4px' }}
             >
               <option value="">Select Priority</option>
               <option value="Top Priority">Top Priority</option>
@@ -129,4 +153,3 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isVisible, onClose })
 };
 
 export default CreateTaskModal;
-
