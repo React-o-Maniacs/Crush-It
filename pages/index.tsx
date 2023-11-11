@@ -71,6 +71,7 @@ export default function Home() {
   };
 
   const [showCreateTaskModal, setShowCreateTaskModal] = useState(false);
+  const date = `${monthsOptions.indexOf(selectedMonthOption) + 1}/${selectedDayOption}/${selectedYearOption}`;
 
   return (
     <>
@@ -139,7 +140,7 @@ export default function Home() {
         </div>
       </div>
       {showCreateTaskModal && (
-        <CreateTaskModal isVisible={showCreateTaskModal} onClose={() => setShowCreateTaskModal(false)} />
+        <CreateTaskModal isVisible={showCreateTaskModal} onClose={() => setShowCreateTaskModal(false)} date={date} />
       )}
         </div>
       </div>
