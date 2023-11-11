@@ -23,9 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const { firstName, lastName } = req.body;
-
-
-
+  
     const updatedUser = await prismadb.user.update({
       where: {
         email: currentUser.email

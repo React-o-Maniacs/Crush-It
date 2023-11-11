@@ -8,7 +8,7 @@ import TimerIcon from '../public/images/clock.svg';
 import { getSession } from "next-auth/react";
 import { NextPageContext } from "next";
 import useCurrentUser from "@/hooks/useCurrentUser";
-import { useSession } from "next-auth/react";
+import toast, { Toaster } from 'react-hot-toast';
 
 export async function getServerSideProps(context: NextPageContext) {
   const session = await getSession(context);
@@ -62,18 +62,22 @@ const Profile = () => {
   
       if (response.ok) {
         const data = await response.json();
+        toast.success('User info updated successfully!');
         console.log('User info updated successfully:', data);
       } else {
         const data = await response.json();
+        toast.error('Failed to update user info!');
         console.error('Failed to update user info:', data);
       }
     } catch (error) {
+      toast.error('Failed to update user info!');
       console.error('Failed to update user info', error);
     }
   };
 
   const validatePassword = (password: string): string | null => {
     if (password.length < 12) {
+      toast.error('Password should be at least 12 characters long!');
       return "Password should be at least 12 characters long";
     }
   
@@ -87,6 +91,7 @@ const Profile = () => {
     const trueConditions = conditions.filter(Boolean).length;
     
     if (trueConditions < 2) {
+      toast.error('Password should meet at least two of the following: include an uppercase letter, a lowercase letter, a number, or a special character (no spaces)');
       return "Password should meet at least two of the following: include an uppercase letter, a lowercase letter, a number, or a special character (no spaces)";
     }
   
@@ -112,13 +117,16 @@ const Profile = () => {
   
       if (pomodoroResponse.ok) {
         const data = await pomodoroResponse.json();
+        toast.error('Pomodoro settings saved!');
         console.log('Pomodoro settings saved:', data);
       } else {
+        toast.error('Failed to save pomodoro settings!');
         console.error('Failed to save pomodoro settings');
       }
 
       const validationError = validatePassword(newPassword);
       if (validationError) {
+        toast.error('Failed to validate password!');
         console.error(validationError);
         return;
       }
@@ -126,12 +134,14 @@ const Profile = () => {
       // Change password if fields are filled out
       if (currentPassword && newPassword && confirmPassword) {
         if (newPassword !== confirmPassword) {
+          toast.error('New password and confirm new password do not match!');
           console.error('New password and confirm new password do not match');
           return;
         }
         await handleChangePassword();
       }
     } catch (error) {
+      toast.error('Failed to save settings!');
       console.error('Failed to save settings', error);
     }
   };
@@ -152,6 +162,7 @@ const Profile = () => {
   
       if (response.ok) {
         const data = await response.json();
+        toast.success('Password changed successfully!');
         console.log('Password changed successfully:', data);
         // Optionally, clear the password fields after successful change
         setCurrentPassword('');
@@ -159,150 +170,155 @@ const Profile = () => {
         setConfirmPassword('');
       } else {
         const data = await response.json();
+        toast.error('Failed to change password!');
         console.error('Failed to change password:', data);
       }
     } catch (error) {
+      toast.error('Failed to change password!');
       console.error('Failed to change password', error);
     }
   };
 
   return (
-    <div className="flex min-h-screen">
-      <SideBanner />
-      <div className="flex-1 flex flex-col">
-        <div className="bg-white p-4 shadow-md">
-          <div className="flex justify-between items-center">
-            <h1>Profile</h1>
-            <ProfileAvatar name={(user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}`.trim() : user?.userName || ""}/>
-          </div>
-        </div>
-        <h2 className="text-2xl font-semibold mt-9 mx-4">User Info</h2>
-        <div className="bg-white p-4 shadow-md my-4 mx-4 rounded-lg">
-          <div className="flex space-x-4">
-            <div className="flex-1">
-              <Input
-                image={UserImage}
-                alt="Image Icon"
-                label="First Name"
-                onChange={(e: any) => setFirstName(e.target.value)}
-                id="firstName"
-                type="text"
-                value={FirstName}
-                inputFieldClassName="flex-1"
-              />
-            </div>
-            <div className="flex-1">
-              <Input
-                image={UserImage}
-                alt="Image Icon"
-                label="Last Name"
-                onChange={(e: any) => setLastName(e.target.value)}
-                id="lastName"
-                type="text"
-                value={LastName}
-                inputFieldClassName="flex-1"
-              />
+    <>
+      <Toaster position="top-right" />
+      <div className="flex min-h-screen">
+        <SideBanner />
+        <div className="flex-1 flex flex-col">
+          <div className="bg-white p-4 shadow-md">
+            <div className="flex justify-between items-center">
+              <h1>Profile</h1>
+              <ProfileAvatar name={(user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}`.trim() : user?.userName || ""}/>
             </div>
           </div>
-        </div>
-        <h2 className="text-2xl font-semibold mt-9 mx-4">Change Password</h2>
-        <div className="bg-white p-4 shadow-md my-4 mx-4 rounded-lg">
-          <div className="flex flex-row space-x-4">
-            <div className="flex-1">
-              <Input
-                image={LockImage}
-                label="Current Password"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setCurrentPassword(e.target.value)
-                }
-                id="currentPassword"
-                type="password"
-                value={currentPassword}
-                alt="Current Password"
-                inputFieldClassName="flex-1"
-              />
-            </div>
-            <div className="flex-1">
-              <Input
-                image={LockImage}
-                label="New Password"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setNewPassword(e.target.value)
-                }
-                id="newPassword"
-                type="password"
-                value={newPassword}
-                alt="New Password"
-                inputFieldClassName="flex-1"
-              />
-            </div>
-            <div className="flex-1">
-              <Input
-                image={LockImage}
-                label="Confirm New Password"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setConfirmPassword(e.target.value)
-                }
-                id="confirmPassword"
-                type="password"
-                value={confirmPassword}
-                alt="Confirm New Password"
-                inputFieldClassName="flex-1"
-              />
+          <h2 className="text-2xl font-semibold mt-9 mx-4">User Info</h2>
+          <div className="bg-white p-4 shadow-md my-4 mx-4 rounded-lg">
+            <div className="flex space-x-4">
+              <div className="flex-1">
+                <Input
+                  image={UserImage}
+                  alt="Image Icon"
+                  label="First Name"
+                  onChange={(e: any) => setFirstName(e.target.value)}
+                  id="firstName"
+                  type="text"
+                  value={FirstName}
+                  inputFieldClassName="flex-1"
+                />
+              </div>
+              <div className="flex-1">
+                <Input
+                  image={UserImage}
+                  alt="Image Icon"
+                  label="Last Name"
+                  onChange={(e: any) => setLastName(e.target.value)}
+                  id="lastName"
+                  type="text"
+                  value={LastName}
+                  inputFieldClassName="flex-1"
+                />
+              </div>
             </div>
           </div>
-        </div>
-        <h2 className="text-2xl font-semibold mt-9 mx-4">Pomodoro Timer (Minutes)</h2>
-        <div className="bg-white p-4 shadow-md my-4 mx-4 rounded-lg">
-          <div className="flex flex-row space-x-4">
-            <div className="flex-1">
-              <Input
-                image={TimerIcon}
-                alt="Pomodoro"
-                label="Pomodoro (minutes)"
-                onChange={(e: any) => setPomodoroTime(e.target.value)}
-                id="pomodoroTime"
-                type="number"
-                value={pomodoroTime}
-                inputFieldClassName="flex-1"
-              />
-            </div>
-            <div className="flex-1">
-              <Input
-                image={TimerIcon}
-                alt="Short Break"
-                label="Short Break (minutes)"
-                onChange={(e: any) => setShortBreakTime(e.target.value)}
-                id="shortBreakTime"
-                type="number"
-                value={shortBreakTime}
-                inputFieldClassName="flex-1"
-              />
-            </div>
-            <div className="flex-1">
-              <Input
-                image={TimerIcon}
-                alt="Long Break"
-                label="Long Break (minutes)"
-                onChange={(e: any) => setLongBreakTime(e.target.value)}
-                id="longBreakTime"
-                type="number"
-                value={longBreakTime}
-                inputFieldClassName="flex-1"
-              />
+          <h2 className="text-2xl font-semibold mt-9 mx-4">Change Password</h2>
+          <div className="bg-white p-4 shadow-md my-4 mx-4 rounded-lg">
+            <div className="flex flex-row space-x-4">
+              <div className="flex-1">
+                <Input
+                  image={LockImage}
+                  label="Current Password"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setCurrentPassword(e.target.value)
+                  }
+                  id="currentPassword"
+                  type="password"
+                  value={currentPassword}
+                  alt="Current Password"
+                  inputFieldClassName="flex-1"
+                />
+              </div>
+              <div className="flex-1">
+                <Input
+                  image={LockImage}
+                  label="New Password"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setNewPassword(e.target.value)
+                  }
+                  id="newPassword"
+                  type="password"
+                  value={newPassword}
+                  alt="New Password"
+                  inputFieldClassName="flex-1"
+                />
+              </div>
+              <div className="flex-1">
+                <Input
+                  image={LockImage}
+                  label="Confirm New Password"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setConfirmPassword(e.target.value)
+                  }
+                  id="confirmPassword"
+                  type="password"
+                  value={confirmPassword}
+                  alt="Confirm New Password"
+                  inputFieldClassName="flex-1"
+                />
+              </div>
             </div>
           </div>
-        </div>
-        <div className="flex justify-center my-20 space-x-4">
-          <button className="h-[60px] w-[270px] bg-white hover:from-sky-500 hover:to-blue-600 text-crush-it-blue text-[18px] font-bold py-2 px-4 rounded-[16px] border border-crush-it-blue ">
-            Cancel
-          </button>
-          <button onClick={handleSave} className="h-[60px] w-[270px] bg-gradient-to-b from-crush-it-blue to-crush-it-blue-g hover:from-sky-500 hover:to-blue-600 text-white text-[18px] font-bold py-2 px-4 rounded-[16px] ">
-            Save
-          </button>
+          <h2 className="text-2xl font-semibold mt-9 mx-4">Pomodoro Timer (Minutes)</h2>
+          <div className="bg-white p-4 shadow-md my-4 mx-4 rounded-lg">
+            <div className="flex flex-row space-x-4">
+              <div className="flex-1">
+                <Input
+                  image={TimerIcon}
+                  alt="Pomodoro"
+                  label="Pomodoro (minutes)"
+                  onChange={(e: any) => setPomodoroTime(e.target.value)}
+                  id="pomodoroTime"
+                  type="number"
+                  value={pomodoroTime}
+                  inputFieldClassName="flex-1"
+                />
+              </div>
+              <div className="flex-1">
+                <Input
+                  image={TimerIcon}
+                  alt="Short Break"
+                  label="Short Break (minutes)"
+                  onChange={(e: any) => setShortBreakTime(e.target.value)}
+                  id="shortBreakTime"
+                  type="number"
+                  value={shortBreakTime}
+                  inputFieldClassName="flex-1"
+                />
+              </div>
+              <div className="flex-1">
+                <Input
+                  image={TimerIcon}
+                  alt="Long Break"
+                  label="Long Break (minutes)"
+                  onChange={(e: any) => setLongBreakTime(e.target.value)}
+                  id="longBreakTime"
+                  type="number"
+                  value={longBreakTime}
+                  inputFieldClassName="flex-1"
+                />
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-center my-20 space-x-4">
+            <button className="h-[60px] w-[270px] bg-white hover:from-sky-500 hover:to-blue-600 text-crush-it-blue text-[18px] font-bold py-2 px-4 rounded-[16px] border border-crush-it-blue ">
+              Cancel
+            </button>
+            <button onClick={handleSave} className="h-[60px] w-[270px] bg-gradient-to-b from-crush-it-blue to-crush-it-blue-g hover:from-sky-500 hover:to-blue-600 text-white text-[18px] font-bold py-2 px-4 rounded-[16px] ">
+              Save
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
