@@ -117,7 +117,7 @@ const Profile = () => {
   
       if (pomodoroResponse.ok) {
         const data = await pomodoroResponse.json();
-        toast.error('Pomodoro settings saved!');
+        toast.success('Pomodoro settings saved!');
         console.log('Pomodoro settings saved:', data);
       } else {
         toast.error('Failed to save pomodoro settings!');
@@ -181,7 +181,7 @@ const Profile = () => {
 
   return (
     <>
-      <Toaster position="top-right" />
+      <Toaster position="top-center" />
       <div className="flex min-h-screen">
         <SideBanner />
         <div className="flex-1 flex flex-col">
