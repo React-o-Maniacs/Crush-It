@@ -8,6 +8,8 @@ import Image from 'next/image';
 import { useState } from "react";
 import Dropdown from "@/components/Dropdown";
 import toast, { Toaster } from 'react-hot-toast';
+import TaskModal from "@/components/TaskModal"
+import AddTaskIcon from '../public/images/add-task.svg'
 
 function getDaysInMonth(month: number): number[] {
   const maxDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -68,6 +70,8 @@ export default function Home() {
     setSelectedYearOption(option);
   };
 
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <>
       <Toaster position="top-right" />
@@ -109,23 +113,34 @@ export default function Home() {
             </button>
           </div>
           <div className="container p-4">
+        <div className="flex items-center mb-4">
           <h1 className="text-4xl font-bold mb-2">Tasks</h1>
-            <div className="flex">
-              {/* Tasks Section with white container */}
-              <div className="flex-1 bg-white shadow rounded-lg p-4">
-              {priorities.map(priority => (
-                  <div key={priority} className="bg-crush-it-grey p-4 my-6 rounded">
-                    <h3 className="text-xl font-bold mb-2">{priority}</h3>
-                      {/* Tasks go here in future */}
-                    </div>
-              ))}
+          <button
+            className="border-3 border-solid border-white p-2"
+            onClick={() => setShowModal(true)}
+          >
+            <Image src={AddTaskIcon} alt="Add Task Icon" />
+          </button>
+        </div>
+        <div className="flex">
+          {/* Tasks Section with white container */}
+          <div className="flex-1 bg-white shadow rounded-lg p-4">
+            {priorities.map((priority) => (
+              <div key={priority} className="bg-crush-it-grey p-4 my-6 rounded">
+                <h3 className="text-xl font-bold mb-2">{priority}</h3>
+                {/* Tasks go here in the future */}
               </div>
-              {/* Appointments Section placeholder */}
-              <div className="flex-1">
-                {/* Appointment components will go here later */}
-              </div>
-            </div>
+            ))}
           </div>
+          {/* Appointments Section placeholder */}
+          <div className="flex-1">
+            {/* Appointment components will go here later */}
+          </div>
+        </div>
+      </div>
+      {showModal && (
+        <TaskModal isVisible={showModal} onClose={() => setShowModal(false)} />
+      )}
         </div>
       </div>
     </>
