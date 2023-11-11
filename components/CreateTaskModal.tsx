@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 
 
-interface TaskModalProps {
+interface CreateTaskModalProps {
   isVisible: boolean;
   onClose: () => void;
   date: string;
 }
 
-const CreateTaskModal: React.FC<TaskModalProps> = ({ isVisible, onClose, date }) => {
+const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isVisible, onClose, date }) => {
   const [title, setTaskTitle] = useState<string>('');
   const [numOfPomodoroTimers, setPomodoro] = useState<number>(1);
   const [notes, setNotes] = useState<string>('');
@@ -79,9 +79,9 @@ const CreateTaskModal: React.FC<TaskModalProps> = ({ isVisible, onClose, date })
       onClick={handleClose}
     >
       <div className="w-[600px] flex flex-col">
-        <div className="bg-white p-2 rounded">
+        <div className="bg-white p-6 rounded-[5px] border-crush-it-blue border-2">
           <h2>
-            <span style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>Create Task</span>
+            <span className='text-1 font-bold'>Create Task</span>
           </h2>
 
           <div className="my-2 flex items-center">
@@ -91,7 +91,7 @@ const CreateTaskModal: React.FC<TaskModalProps> = ({ isVisible, onClose, date })
                 type="text"
                 value={title}
                 onChange={(e) => setTaskTitle(e.target.value)}
-                style={{ border: '1px solid #ccc', padding: '0.5rem', borderRadius: '4px' }}
+                className='ml-2 outline-crush-it-blue hover:rounded-[1px] border-gray-400 border-[1px] rounded-[2px] p-2 text-1'
                 required
               />
             </div>
@@ -102,7 +102,7 @@ const CreateTaskModal: React.FC<TaskModalProps> = ({ isVisible, onClose, date })
                 type="number"
                 value={numOfPomodoroTimers < 0 ? 0 : numOfPomodoroTimers}
                 onChange={(e) => setPomodoro(Math.max(1, Number(e.target.value)))}
-                style={{ border: '1px solid #ccc', padding: '0.5rem', borderRadius: '4px', width: '4em' }}
+                className='ml-2 outline-crush-it-blue hover:rounded-[1px] border-gray-400 border-[1px] rounded-[2px] p-2 text-1 w-16'
               />
             </div>
           </div>
@@ -113,7 +113,7 @@ const CreateTaskModal: React.FC<TaskModalProps> = ({ isVisible, onClose, date })
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               rows={5}
-              style={{ border: '1px solid #ccc', padding: '0.5rem', borderRadius: '4px', width: '100%' }}
+              className='outline-crush-it-blue hover:rounded-[1px] border-gray-400 border-[1px] rounded-[2px] p-2 text-1 w-full'
               required
             />
           </div>
@@ -123,7 +123,7 @@ const CreateTaskModal: React.FC<TaskModalProps> = ({ isVisible, onClose, date })
             <select
               value={priority}
               onChange={(e) => setPriority(e.target.value)}
-              style={{ border: '1px solid #ccc', padding: '0.5rem', borderRadius: '4px' }}
+              className='ml-2 border-gray-400 border-[1px] rounded-[4px] p-2'
             >
               <option value="">Select Priority</option>
               <option value="Top Priority">Top Priority</option>
