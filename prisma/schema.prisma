@@ -73,6 +73,7 @@ model Task {
   title String
   notes String
   priority Int
+  Date String
   numOfPomodoroTimers Int
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
