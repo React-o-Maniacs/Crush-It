@@ -8,7 +8,7 @@ import Image from 'next/image';
 import { useState } from "react";
 import Dropdown from "@/components/Dropdown";
 import toast, { Toaster } from 'react-hot-toast';
-import TaskModal from "@/components/TaskModal"
+import CreateTaskModal from "@/components/CreateTaskModal"
 import AddTaskIcon from '../public/images/add-task.svg'
 
 function getDaysInMonth(month: number): number[] {
@@ -53,7 +53,7 @@ export default function Home() {
 
   const daysOptions = selectedMonthOption
     ? getDaysInMonth(monthsOptions.indexOf(selectedMonthOption) + 1).map(String)
-    : getDaysInMonth(monthsOptions.indexOf("January") + 1).map(String);
+    : getDaysInMonth(monthsOptions.indexOf(currentMonth) + 1).map(String);
 
   const currentDay = currentDate.getDate().toString();
   const [selectedDayOption, setSelectedDayOption] = useState<string>(currentDay);
@@ -70,7 +70,7 @@ export default function Home() {
     setSelectedYearOption(option);
   };
 
-  const [showModal, setShowModal] = useState(false);
+  const [showCreateTaskModal, setShowCreateTaskModal] = useState(false);
 
   return (
     <>
@@ -113,11 +113,11 @@ export default function Home() {
             </button>
           </div>
           <div className="container p-4">
-        <div className="flex items-center mb-4">
+        <div className="flex items-center">
           <h1 className="text-4xl font-bold mb-2">Tasks</h1>
           <button
             className="border-3 border-solid border-white p-2"
-            onClick={() => setShowModal(true)}
+            onClick={() => setShowCreateTaskModal(true)}
           >
             <Image src={AddTaskIcon} alt="Add Task Icon" />
           </button>
@@ -138,8 +138,8 @@ export default function Home() {
           </div>
         </div>
       </div>
-      {showModal && (
-        <TaskModal isVisible={showModal} onClose={() => setShowModal(false)} />
+      {showCreateTaskModal && (
+        <CreateTaskModal isVisible={showCreateTaskModal} onClose={() => setShowCreateTaskModal(false)} />
       )}
         </div>
       </div>
