@@ -10,8 +10,7 @@ import Dropdown from "@/components/Dropdown";
 import toast, { Toaster } from 'react-hot-toast';
 import CreateTaskModal from "@/components/CreateTaskModal"
 import AddTaskIcon from '../public/images/add-task.svg'
-import Task from '../components/task';
-import { TaskData } from '../components/task';
+import Task, { TaskData } from "@/components/Task";
 
 function getDaysInMonth(month: number): number[] {
   const maxDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
