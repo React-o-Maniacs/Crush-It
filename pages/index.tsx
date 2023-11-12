@@ -159,9 +159,9 @@ export default function Home() {
           </div>
           <div className="container p-4">
         <div className="flex items-center">
-          <h1 className="text-4xl font-bold mb-2">Tasks</h1>
+          <h1 className="text-3xl font-bold mb-2">Tasks</h1>
           <button
-            className="border-3 border-solid border-white p-2"
+            className="ml-2 border-3 border-solid border-white p-2"
             onClick={() => setShowCreateTaskModal(true)}
           >
             <Image src={AddTaskIcon} alt="Add Task Icon" />

@@ -36,6 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         priority,
         date,
         userId: currentUser.id,
+        status: 'Not Started'
       },
     });
 
