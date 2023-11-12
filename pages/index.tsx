@@ -122,7 +122,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchTasks() {
       try {
-        const response = await fetch('/api/tasks'); // Replace with your API endpoint
+        const response = await fetch('/api/retrieveTask'); // Replace with your API endpoint
         if (response.ok) {
           const data = await response.json();
           setTasks(data);
