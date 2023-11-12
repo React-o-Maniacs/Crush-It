@@ -12,9 +12,6 @@ interface ProfileAvatarProps {
 const ProfileAvatar: React.FC<ProfileAvatarProps> = ({ name }) => {
   const router = useRouter();
   const { data: user } = useCurrentUser();
-  const handleSignOut = async () => {
-    await signOut({ callbackUrl: '/' });
-  };
 
   const handleProfileClick = () => {
     router.push("/profile");
