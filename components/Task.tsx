@@ -18,6 +18,7 @@ export interface TaskData {
   status: TaskStatus
 }
 
+
 const taskStatuses: Record<TaskStatus, { icon: StaticImageData; next: TaskStatus }> = {
   'Not Started' : { icon: notStartedIcon, next: 'In Progress' },
   'In Progress': { icon: inProgressIcon, next: 'Complete' },
@@ -49,7 +50,6 @@ const updateTaskStatusInDB = async (taskId: String, newStatus: TaskStatus) => {
     console.error('Error updating task status:', error);
   }
 };
-
 
 
 interface TaskProps {
