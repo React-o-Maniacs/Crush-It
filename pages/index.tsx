@@ -46,16 +46,24 @@ export default function Home() {
   const monthsOptions = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
   const currentDate = new Date();
+  const [daysOptions, setDaysOptions] = useState<string[]>(getDaysInMonth(currentDate.getMonth() + 1).map(String));
+
   const currentMonth = monthsOptions[currentDate.getMonth()];
   const [selectedMonthOption, setSelectedMonthOption] = useState<string>(currentMonth);
 
   const handleMonthSelect = (option: string) => {
     setSelectedMonthOption(option);
-  };
 
-  const daysOptions = selectedMonthOption
-    ? getDaysInMonth(monthsOptions.indexOf(selectedMonthOption) + 1).map(String)
-    : getDaysInMonth(monthsOptions.indexOf(currentMonth) + 1).map(String);
+    const daysInSelectedMonth = getDaysInMonth(monthsOptions.indexOf(option) + 1).map(String);
+  
+    // Update the selected day to the maximum day if it exceeds the days in the selected month
+    setSelectedDayOption((prevDay) => {
+      const newDay = Math.min(Number(prevDay), daysInSelectedMonth.length);
+      return newDay.toString();
+    });
+  
+    setDaysOptions(daysInSelectedMonth);
+  };
 
   const currentDay = currentDate.getDate().toString();
   const [selectedDayOption, setSelectedDayOption] = useState<string>(currentDay);
@@ -75,8 +83,43 @@ export default function Home() {
   const [showCreateTaskModal, setShowCreateTaskModal] = useState(false);
   const date = `${monthsOptions.indexOf(selectedMonthOption) + 1}/${selectedDayOption}/${selectedYearOption}`;
 
-  const [tasks, setTasks] = useState<TaskData[]>([]);
+  const decrementMonthDropdownValue = () => {
+    const currentIndex = monthsOptions.indexOf(selectedMonthOption);
+    const newIndex = (currentIndex - 1 + monthsOptions.length) % monthsOptions.length;
+    setSelectedMonthOption(monthsOptions[newIndex]);
+  };
+  
+  const decrementDayDropdownValue = () => {
+    const currentIndex = daysOptions.indexOf(selectedDayOption);
+    const newIndex = (currentIndex - 1 + daysOptions.length) % daysOptions.length;
+    setSelectedDayOption(daysOptions[newIndex]);
+  };
 
+  const decrementYearDropdownValue = () => {
+    const currentIndex = yearsOptions.indexOf(selectedYearOption);
+    const newIndex = (currentIndex - 1 + yearsOptions.length) % yearsOptions.length;
+    setSelectedYearOption(yearsOptions[newIndex]);
+  };
+
+  const incrementMonthDropdownValue = () => {
+    const currentIndex = monthsOptions.indexOf(selectedMonthOption);
+    const newIndex = (currentIndex + 1) % monthsOptions.length;
+    setSelectedMonthOption(monthsOptions[newIndex]);
+  };
+
+  const incrementYearDropdownValue = () => {
+    const currentIndex = yearsOptions.indexOf(selectedYearOption);
+    const newIndex = (currentIndex + 1) % yearsOptions.length;
+    setSelectedYearOption(yearsOptions[newIndex]);
+  };
+
+  const incrementDayDropdownValue = () => {
+    const currentIndex = daysOptions.indexOf(selectedDayOption);
+    const newIndex = (currentIndex + 1) % daysOptions.length;
+    setSelectedDayOption(daysOptions[newIndex]);
+  };
+
+  const [tasks, setTasks] = useState<TaskData[]>([]);
   useEffect(() => {
     async function fetchTasks() {
       try {
@@ -106,31 +149,31 @@ export default function Home() {
             </div>
           </div>
           <div className="flex bg-crush-it-blue bg-opacity-[15%] rounded-[10px] m-4 p-3 justify-center">
-            <button className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3">
+            <button onClick={decrementMonthDropdownValue} className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3">
                 <Image className='scale-125' src={ArrowIcon} alt="Arrow Icon" />
             </button>
             <div className="flex ml-2">
-              <Dropdown placeholder={currentMonth} options={monthsOptions} onSelect={handleMonthSelect} widthStyle="w-[200px]" />
+              <Dropdown selectedOption={selectedMonthOption} options={monthsOptions} onChange={handleMonthSelect} widthStyle="w-[200px]" />
             </div>
-            <button className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-2">
+            <button onClick={incrementMonthDropdownValue} className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-2">
                 <Image className='scale-125 rotate-180' src={ArrowIcon} alt="Arrow Icon" />
             </button>
-            <button className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-6">
+            <button onClick={decrementDayDropdownValue} className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-6">
                 <Image className='scale-125' src={ArrowIcon} alt="Arrow Icon" />
             </button>
             <div className="flex ml-2">
-              <Dropdown placeholder={currentDay} options={daysOptions} onSelect={handleDaySelect} widthStyle="w-[100px]" />
+              <Dropdown selectedOption={selectedDayOption} options={daysOptions} onChange={handleDaySelect} widthStyle="w-[100px]" />
             </div>
-            <button className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-2">
+            <button onClick={incrementDayDropdownValue} className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-2">
               <Image className='scale-125 rotate-180' src={ArrowIcon} alt="Arrow Icon" />
             </button>
-            <button className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-6">
+            <button onClick={decrementYearDropdownValue} className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-6">
                 <Image className='scale-125' src={ArrowIcon} alt="Arrow Icon" />
             </button>
             <div className="flex ml-2">
-              <Dropdown placeholder={currentYear.toString()} options={yearsOptions} onSelect={handleYearSelect} widthStyle="w-[115px]" />
+              <Dropdown selectedOption={selectedYearOption} options={yearsOptions} onChange={handleYearSelect} widthStyle="w-[115px]" />
             </div>
-            <button className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-2">
+            <button onClick={incrementYearDropdownValue} className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-2">
               <Image className='scale-125 rotate-180' src={ArrowIcon} alt="Arrow Icon" />
             </button>
           </div>
