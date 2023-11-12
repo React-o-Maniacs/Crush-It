@@ -5,11 +5,12 @@ import useCurrentUser from "@/hooks/useCurrentUser";
 import SideBanner from "@/components/SideBanner";
 import ArrowIcon from '../public/images/arrow.svg';
 import Image from 'next/image';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Dropdown from "@/components/Dropdown";
 import toast, { Toaster } from 'react-hot-toast';
 import CreateTaskModal from "@/components/CreateTaskModal"
 import AddTaskIcon from '../public/images/add-task.svg'
+import Task, { TaskData } from "@/components/Task";
 
 function getDaysInMonth(month: number): number[] {
   const maxDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -117,6 +118,24 @@ export default function Home() {
     setSelectedDayOption(daysOptions[newIndex]);
   };
 
+  const [tasks, setTasks] = useState<TaskData[]>([]);
+  useEffect(() => {
+    async function fetchTasks() {
+      try {
+        const response = await fetch('/api/tasks'); // Replace with your API endpoint
+        if (response.ok) {
+          const data = await response.json();
+          setTasks(data);
+        } else {
+          console.error('Error fetching tasks');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+    fetchTasks();
+  }, []);
+
   return (
     <>
       <Toaster position="top-right" />
@@ -174,6 +193,9 @@ export default function Home() {
               <div key={priority} className="bg-crush-it-grey p-4 my-6 rounded">
                 <h3 className="text-xl font-bold mb-2">{priority}</h3>
                 {/* Tasks go here in the future */}
+                {tasks.filter(task => task.priority === priority).map(task => (
+                  <Task key={task.id} task={task} />
+                ))}
               </div>
             ))}
           </div>
