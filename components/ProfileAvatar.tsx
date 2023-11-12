@@ -12,9 +12,6 @@ interface ProfileAvatarProps {
 const ProfileAvatar: React.FC<ProfileAvatarProps> = ({ name }) => {
   const router = useRouter();
   const { data: user } = useCurrentUser();
-  const handleSignOut = async () => {
-    await signOut({ callbackUrl: '/' });
-  };
 
   const handleProfileClick = () => {
     router.push("/profile");
@@ -33,17 +30,6 @@ const ProfileAvatar: React.FC<ProfileAvatarProps> = ({ name }) => {
         </div>
         <label className="text-gray-700 text-sm font-normal ml-2">{user?.firstName && user?.lastName ? `${user.firstName} ${user.lastName}` : user?.email}</label>
       </div>
-
-      <div className="absolute top-full mt-2 right-0 bg-white shadow-md rounded-md py-2 w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-300 z-10">
-        <button 
-          onClick={handleSignOut}
-          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-        >
-          Sign Out
-        </button>
-      </div>
-        {/* Invisible bridge */}
-        <div className="absolute right-0 h-2 w-full bg-transparent top-full group-hover:h-8"></div>
     </div>
   );
 };
