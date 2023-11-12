@@ -13,8 +13,6 @@ export interface TaskData {
   priority: TaskPriority;
   notes: string;
 }
-// ... rest of your Task component
-
 
 interface TaskProps {
   task: TaskData;
