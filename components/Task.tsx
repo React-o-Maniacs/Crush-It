@@ -1,8 +1,7 @@
 // components/Task.tsx
 import React, { useState } from 'react';
 import Image from 'next/image';
-import rightArrow from "../public/images/rightarrow.svg";
-import downArrow from "../public/images/downarrow.svg";
+import rightArrow from "../public/images/right-arrow.svg";
 import moveImage from "../public/images/Drag.svg";
 
 // components/Task.tsx
