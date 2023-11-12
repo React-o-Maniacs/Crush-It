@@ -3,15 +3,15 @@ import ArrowHollowIcon from '../public/images/arrow-hollow.svg';
 import Image from 'next/image';
 
 interface DropdownProps {
-  placeholder: string;
   options: string[];
-  onSelect: (selectedOption: string) => void;
+  onChange: (selectedValue: string) => void;
   widthStyle?: string;
+  selectedOption: string; // New prop to control the selected option
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ placeholder, options, onSelect, widthStyle }) => {
+const Dropdown: React.FC<DropdownProps> = ({ options, onChange, widthStyle, selectedOption: propSelectedOption }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [selectedOption, setSelectedOption] = useState<string>(propSelectedOption || options[0]); // Set the initial value
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   const toggleDropdown = () => {
@@ -31,10 +31,15 @@ const Dropdown: React.FC<DropdownProps> = ({ placeholder, options, onSelect, wid
     };
   }, []);
 
-  const handleOptionClick = (option: string) => {
-    setSelectedOption(option);
-    onSelect(option);
+  useEffect(() => {
+    setSelectedOption(propSelectedOption || options[0]); // Update the selected option when prop changes
+  }, [propSelectedOption, options]);
+
+  const handleOptionChange = (event: React.MouseEvent<HTMLLIElement>) => {
+    const newSelectedOption = event.currentTarget.textContent || '';
+    setSelectedOption(newSelectedOption);
     setIsOpen(false);
+    onChange(newSelectedOption);
   };
 
   return (
@@ -43,7 +48,7 @@ const Dropdown: React.FC<DropdownProps> = ({ placeholder, options, onSelect, wid
         className={`flex items-center rounded-[10px] border border-crush-it-blue p-2 px-3 text-left text-[22px] font-bold ${widthStyle}`}
         onClick={toggleDropdown}
       >
-        <span className="flex-1">{selectedOption || placeholder}</span>
+        <span className="flex-1">{selectedOption}</span>
         <Image
           className={`scale-125 transition-transform transform ${isOpen ? 'rotate-180' : 'rotate-0'}`}
           src={ArrowHollowIcon}
@@ -58,7 +63,7 @@ const Dropdown: React.FC<DropdownProps> = ({ placeholder, options, onSelect, wid
               <li
                 key={option}
                 className="cursor-pointer p-2 hover:bg-crush-it-blue rounded-[5px]"
-                onClick={() => handleOptionClick(option)}
+                onClick={handleOptionChange}
               >
                 {option}
               </li>
