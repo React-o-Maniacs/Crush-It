@@ -187,7 +187,7 @@ const Profile = () => {
         <div className="flex-1 flex flex-col">
           <div className="bg-white p-4 shadow-md">
             <div className="flex justify-between items-center">
-              <h1>Profile</h1>
+              <h1 className=" font-bold  text-3xl">Profile</h1>
               <ProfileAvatar name={(user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}`.trim() : user?.userName || ""}/>
             </div>
           </div>
