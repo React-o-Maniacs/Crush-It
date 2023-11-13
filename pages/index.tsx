@@ -119,20 +119,23 @@ export default function Home() {
   };
 
   const [tasks, setTasks] = useState<TaskData[]>([]);
-  useEffect(() => {
-    async function fetchTasks() {
-      try {
-        const response = await fetch('/api/retrieveTask'); // Replace with your API endpoint
-        if (response.ok) {
-          const data = await response.json();
-          setTasks(data);
-        } else {
-          console.error('Error fetching tasks');
-        }
-      } catch (error) {
-        console.error('Error:', error);
+  const fetchTasks = async () => {
+    try {
+      const response = await fetch('/api/retrieveTask');
+      if (response.ok) {
+        const data = await response.json();
+        setTasks(data);
+      } else {
+        toast.error('Error fetching tasks')
+        console.error('Error fetching tasks');
       }
+    } catch (error) {
+      toast.error('Error fetching tasks')
+      console.error('Error:', error);
     }
+  };
+
+  useEffect(() => {
     fetchTasks();
   }, []);
 
@@ -206,7 +209,7 @@ export default function Home() {
         </div>
       </div>
       {showCreateTaskModal && (
-        <CreateTaskModal isVisible={showCreateTaskModal} onClose={() => setShowCreateTaskModal(false)} date={date} />
+        <CreateTaskModal isVisible={showCreateTaskModal} onClose={() => setShowCreateTaskModal(false)} date={date} onTaskAdded={fetchTasks} />
       )}
         </div>
       </div>
