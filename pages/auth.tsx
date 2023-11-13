@@ -34,10 +34,16 @@ const Auth = () => {
     return null;
   };
 
-  const validatePassword = (password: string): string | null => {
+
+  
+  const validatePassword = (args: {password: string, confirmPassword: string}): string | null => {
     if (password.length < 12) {
       toast.error('Password should be at least 12 characters long!');
       return "Password should be at least 12 characters long";
+    }
+    if (password != confirmPassword) {
+      toast.error('Both password fields should match!');
+      return "Both password should match";
     }
 
     const conditions = [
@@ -73,8 +79,11 @@ const Auth = () => {
 
   const register = useCallback(async () => {
     try {
-      await validatePassword(password);
+      // toast("Testing start!");
+      await validatePassword(password, confirmPassword);
+      // toast("Test: Checked password");
       await validateEmail(email);
+      // toast("Test: Checked email");
       await axios.post('/api/register', {
         email,
         password
