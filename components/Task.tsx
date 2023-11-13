@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import Image, { StaticImageData } from 'next/image';
 import rightArrow from "../public/images/right-arrow.svg";
 import moveImage from "../public/images/Drag.svg";
-import notStartedIcon from "../public/images/notStarted.svg";
-import inProgressIcon from "../public/images/inProgressIcon.svg";
-import completeIcon from "../public/images/completeIcon.svg";
-import rolledOverIcon from "../public/images/rolledOverIcon.svg";
+import notStartedIcon from "../public/images/not-started.svg";
+import inProgressIcon from "../public/images/in-progress.svg";
+import completeIcon from "../public/images/complete.svg";
+import rolledOverIcon from "../public/images/rolled-over.svg";
+import toast, { Toaster } from 'react-hot-toast';
+
 
 export type TaskPriority = 'Top Priority' | 'Important' | 'Other';
 export type TaskStatus = 'Not Started' | 'In Progress' | 'Complete' | 'Rolled Over';
@@ -26,9 +28,9 @@ const taskStatuses: Record<TaskStatus, { icon: StaticImageData; next: TaskStatus
   'Rolled Over': { icon: rolledOverIcon, next: 'Not Started' },
 };
 
-const updateTaskStatusInDB = async (taskId: String, newStatus: TaskStatus) => {
+const updateTaskStatus = async (taskId: String, newStatus: TaskStatus) => {
   try {
-    const response = await fetch('/api/updateStatus', {
+    const response = await fetch('/api/updateTaskStatus', {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -40,13 +42,16 @@ const updateTaskStatusInDB = async (taskId: String, newStatus: TaskStatus) => {
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+      toast.error('Error updating task status')
+      //throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
     const data = await response.json();
     // Handle the response data if needed
+    toast.success('Task status updated')
     console.log('Task status updated:', data);
   } catch (error) {
+    toast.error('Error updating task status')
     console.error('Error updating task status:', error);
   }
 };
@@ -70,14 +75,16 @@ const Task: React.FC<TaskProps> = ({ task }) => {
     if (nextStatus) {
       setTaskStatus(nextStatus);
     } else {
+      toast.error('Next status not found for current status');
       console.error(`Next status not found for current status: ${TaskStatus}`);
     }
-    await updateTaskStatusInDB(task.id, nextStatus);
+    await updateTaskStatus(task.id, nextStatus);
   };
   
 
     // Check if the status is valid before rendering
     if (!taskStatuses[TaskStatus]) {
+      toast.error("Error with Status");
       console.error(`Invalid status: ${TaskStatus}`);
       // You could render a fallback or handle this error appropriately here
       // For now, let's just return null to avoid crashing the app

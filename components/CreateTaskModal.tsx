@@ -6,9 +6,11 @@ interface CreateTaskModalProps {
   isVisible: boolean;
   onClose: () => void;
   date: string;
+  onTaskAdded?: () => Promise<void>; // Optional callback prop
+
 }
 
-const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isVisible, onClose, date }) => {
+const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isVisible, onClose, date, onTaskAdded }) => {
   const [title, setTaskTitle] = useState<string>('');
   const [numOfPomodoroTimers, setPomodoro] = useState<number>(1);
   const [notes, setNotes] = useState<string>('');
@@ -59,6 +61,9 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isVisible, onClose, d
         const data = await taskResponse.json();
         toast.success('Task created successfully');
         console.log('Task created successfully:', data);
+        if (onTaskAdded){
+          await onTaskAdded();
+        }
       } else {
         toast.error('Failed to create task.');
         console.error('Failed to create task:', taskResponse);
