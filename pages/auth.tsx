@@ -19,6 +19,50 @@ const Auth = () => {
     setVariant((currentVariant) => currentVariant === 'login' ? 'register' : 'login');
   }, []);
 
+  const validateEmail = (email : string): string | null => {
+    const conditions = [
+      /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/.test(email) // Email structure
+    ];
+    
+    const trueConditions = conditions.filter(Boolean).length;
+    
+    if (trueConditions == 0) {
+      toast.error("Please enter a real email");
+      return "Please enter a real email";
+    }
+    
+    return null;
+  };
+
+
+  
+  const validatePassword = (args: {password: string, confirmPassword: string}): string | null => {
+    if (password.length < 12) {
+      toast.error('Password should be at least 12 characters long!');
+      return "Password should be at least 12 characters long";
+    }
+    if (password != confirmPassword) {
+      toast.error('Both password fields should match!');
+      return "Both password should match";
+    }
+
+    const conditions = [
+      /[A-Z]/.test(password), // Uppercase letter
+      /[a-z]/.test(password), // Lowercase letter
+      /[0-9]/.test(password), // Number
+      /[^A-Za-z0-9]/.test(password) // Special character (no spaces)
+    ];
+
+    const trueConditions = conditions.filter(Boolean).length;
+
+    if (trueConditions < 2) {
+      toast.error('Password should meet at least two of the following: include an uppercase letter, a lowercase letter, a number, or a special character (no spaces)');
+      return "Password should meet at least two of the following: include an uppercase letter, a lowercase letter, a number, or a special character (no spaces)"
+    }
+
+    return null;
+  };
+
   const login = useCallback(async () => {
     try {
       await signIn('credentials', {
@@ -34,6 +78,11 @@ const Auth = () => {
 
   const register = useCallback(async () => {
     try {
+      // toast("Testing start!");
+      await validatePassword(password, confirmPassword);
+      // toast("Test: Checked password");
+      await validateEmail(email);
+      // toast("Test: Checked email");
       await axios.post('/api/register', {
         email,
         password
