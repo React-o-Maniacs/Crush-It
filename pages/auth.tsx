@@ -78,19 +78,18 @@ const Auth = () => {
 
   const register = useCallback(async () => {
     try {
+      const emailError = validateEmail(email);
+      const passwordError = await validatePassword({ password, confirmPassword });
+
       if (!confirmPassword) {
         toast.error('Please enter the same password in the Confirm Password field.');
         return; // Stop the registration process if confirmPassword is empty
       }
   
-      const passwordError = await validatePassword({ password, confirmPassword });
-      if (passwordError) {
+      // No need for toasts here since validateEmail and validatePassword send toasts directly from threre
+      // However, we do need to catch if one of them triggered
+      if (passwordError || emailError) {
         return; // Stop the registration process if there is a password error
-      }
-  
-      const emailError = validateEmail(email);
-      if (emailError) {
-        return; // Stop the registration process if there is an email error
       }
   
       await axios.post('/api/register', {
