@@ -7,7 +7,7 @@ import inProgressIcon from "../public/images/in-progress.svg";
 import completeIcon from "../public/images/complete.svg";
 import rolledOverIcon from "../public/images/rolled-over.svg";
 import pencilIcon from "../public/images/pencil.svg";
-import blueRectangle from "../public/images/blueRectangleForCheck.svg";
+import blueRectangle from "../public/images/blue-rectangle-for-check.svg";
 import CheckIcon from '../public/images/check-icon.svg';
 import plusSquare from '../public/images/plus-square.svg';
 import minusSquare from '../public/images/minus-square.svg';
