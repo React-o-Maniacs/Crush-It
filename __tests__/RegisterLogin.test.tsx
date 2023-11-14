@@ -33,7 +33,7 @@ describe('Auth Component', () => {
       (axios.post as jest.MockedFunction<typeof axios.post>).mockResolvedValue({ data: {} });
       const { getByLabelText } = render(<Auth />);
       fireEvent.click(screen.getByText(/create an account/i));
-      fireEvent.change(getByLabelText(/email\/username/i), { target: { value: email } });
+      fireEvent.change(screen.getByLabelText(/email\/username/i), { target: { value: email } });
       fireEvent.change(screen.getByLabelText('Password'), { target: { value: password } });
       fireEvent.change(screen.getByLabelText('Confirm Password'), { target: { value: password } });
       fireEvent.click(screen.getByRole('button', { name: /sign up/i }));
