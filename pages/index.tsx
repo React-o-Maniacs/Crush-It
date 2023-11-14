@@ -186,7 +186,6 @@ export default function Home() {
       setDaysOptions(newDaysOptions);
     }
   };
-  
 
   const incrementYearDropdownValue = () => {
     const currentIndex = yearsOptions.indexOf(selectedYearOption);
@@ -197,7 +196,45 @@ export default function Home() {
   const incrementDayDropdownValue = () => {
     const currentIndex = daysOptions.indexOf(selectedDayOption);
     const newIndex = (currentIndex + 1) % daysOptions.length;
-    setSelectedDayOption(daysOptions[newIndex]);
+  
+    // Check if it's the last day of the month
+    const isLastDayOfMonth = newIndex === 0;
+    // Check if it's the last day of December
+    const isLastDayOfDecember = selectedMonthOption === 'December' && newIndex === 0;
+  
+    if (isLastDayOfMonth) {
+      // Increment the month
+      const currentMonthIndex = monthsOptions.indexOf(selectedMonthOption);
+      const newMonthIndex = (currentMonthIndex + 1) % monthsOptions.length;
+      const newMonth = monthsOptions[newMonthIndex];
+  
+      // Update the selected month
+      setSelectedMonthOption(newMonth);
+  
+      // Update the selected day to the first day of the new month
+      setSelectedDayOption(getDaysInMonth(Number(selectedYearOption), newMonthIndex + 1)[0].toString());
+  
+      // Update the daysOptions for the new month
+      setDaysOptions(getDaysInMonth(Number(selectedYearOption), newMonthIndex + 1).map(String));
+    } else if(isLastDayOfDecember) {
+      // Increment the year
+      const newYear = (parseInt(selectedYearOption, 10) + 1).toString();
+  
+      // Update the selected year
+      setSelectedYearOption(newYear);
+  
+      // Update the selected month to January
+      setSelectedMonthOption('January');
+  
+      // Update the selected day to the first day of January
+      setSelectedDayOption(getDaysInMonth(Number(newYear), 1)[0].toString());
+  
+      // Update the daysOptions for January
+      setDaysOptions(getDaysInMonth(Number(newYear), 1).map(String));
+    }{
+      // If it's not the last day of the month, simply update the selected day
+      setSelectedDayOption(daysOptions[newIndex]);
+    }
   };
 
   const [tasks, setTasks] = useState<TaskData[]>([]);
