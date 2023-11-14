@@ -77,29 +77,34 @@ const Auth = () => {
   }, [email, password]);
 
   const register = useCallback(async () => {
-    const validationError = validatePassword(password, confirmPassword);
-    if (validationError) {
-      toast.error("Failed to validate password!");
-      return;
-    }
     try {
-      // toast("Testing start!");
-      await validatePassword(password, confirmPassword);
-      // toast("Test: Checked password");
-      await validateEmail(email);
-      // toast("Test: Checked email");
+      if (!confirmPassword) {
+        toast.error('Please enter the same password in the Confirm Password field.');
+        return; // Stop the registration process if confirmPassword is empty
+      }
+  
+      const passwordError = await validatePassword({ password, confirmPassword });
+      if (passwordError) {
+        return; // Stop the registration process if there is a password error
+      }
+  
+      const emailError = validateEmail(email);
+      if (emailError) {
+        return; // Stop the registration process if there is an email error
+      }
+  
       await axios.post('/api/register', {
         email,
         password
       });
-
+  
       toast.success('Successfully registered!');
       login();
     } catch (error) {
       toast.error('Failed to register!');
       console.log(error);
     }
-  }, [email, password, login]);
+  }, [email, password, confirmPassword, validatePassword, validateEmail]);
 
   return (
     <>
@@ -151,7 +156,7 @@ const Auth = () => {
                   rounded-[16px] ">{variant === 'login' ? 'Sign In' : 'Sign Up'}</button>
               </div>
               <div className="flex bg-crush-it-grey rounded-[10px] p-5 justify-center items-end">
-                <p className="">
+                <p>
                   {variant === 'login' ? 'First time using Crush It? ' : 'Already have an account? '}
                   <span className='text-crush-it-blue hover:underline cursor-pointer' onClick={toggleVariant}>
                   {variant === 'login' ? 'Create an account' : 'Sign in Here!'}
