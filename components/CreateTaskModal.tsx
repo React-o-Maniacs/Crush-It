@@ -88,7 +88,6 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isVisible, onClose, d
           <h2>
             <span className='text-1 font-bold'>Create Task</span>
           </h2>
-
           <div className="my-2 flex items-center">
             <div className="mr-4">
               <label className="font-bold mb-2">Task Title: </label>
@@ -100,7 +99,6 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isVisible, onClose, d
                 required
               />
             </div>
-
             <div className="ml-16">
               <label className="font-bold mb-2">Pomodoro: </label>
               <input
@@ -111,7 +109,6 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isVisible, onClose, d
               />
             </div>
           </div>
-
           <div className="my-2">
             <label className="font-bold mb-2">Notes: </label>
             <textarea
@@ -122,7 +119,6 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isVisible, onClose, d
               required
             />
           </div>
-
           <div className="my-2">
             <label className="font-bold mb-2">Priority: </label>
             <select
@@ -136,7 +132,6 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isVisible, onClose, d
               <option value="Other">Other</option>
             </select>
           </div>
-
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}>
             <button
               className="h-[40px] w-[120px] bg-white hover:from-sky-500 hover:to-blue-600 text-crush-it-blue text-[14px] font-bold py-1 px-2 rounded-[8px] border border-crush-it-blue mr-2"
