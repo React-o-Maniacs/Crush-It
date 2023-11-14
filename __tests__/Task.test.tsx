@@ -27,33 +27,33 @@ describe('Profile Page UI', () => {
     render(<Index />);
 
     await waitFor(() => {
-      const tasksTitle = screen.getByText('Tasks');
-      const topPriority = screen.getByText('Top Priority');
-      const important = screen.getByText('Important');
-      const other = screen.getByText('Other');
+      const tasksTitle = screen.getByText('Tasks')
+      const topPriority = screen.getByText('Top Priority')
+      const important = screen.getByText('Important')
+      const other = screen.getByText('Other')
 
-      expect(tasksTitle).toBeInTheDocument();
-      expect(topPriority).toBeInTheDocument();
-      expect(important).toBeInTheDocument();
-      expect(other).toBeInTheDocument();
+      expect(tasksTitle).toBeInTheDocument()
+      expect(topPriority).toBeInTheDocument()
+      expect(important).toBeInTheDocument()
+      expect(other).toBeInTheDocument()
     });
   });
 
   it('renders tasks and filters them by priority', async () => {
     render(<Index />);
     await waitFor(() => {
-      const task1 = screen.getByText('Task 1');
-      const task2 = screen.getByText('Task 2');
+      const task1 = screen.getByText('Task 1')
+      const task2 = screen.getByText('Task 2')
 
-      expect(task1).toBeInTheDocument();
-      expect(task2).toBeInTheDocument();
+      expect(task1).toBeInTheDocument()
+      expect(task2).toBeInTheDocument()
 
       // Verify tasks are sorted under the right priority
       for (const task of mockTasks) {
-        expect(screen.getByText(task.title)).toBeInTheDocument();
-        const taskElement = screen.getByText(task.title);
-        const priorityHeading = taskElement.closest('.bg-crush-it-grey')?.querySelector('.text-xl');
-        expect(priorityHeading).toHaveTextContent(task.priority);
+        expect(screen.getByText(task.title)).toBeInTheDocument()
+        const taskElement = screen.getByText(task.title)
+        const priorityHeading = taskElement.closest('.bg-crush-it-grey')?.querySelector('.text-xl')
+        expect(priorityHeading).toHaveTextContent(task.priority)
       }
     });
   });
@@ -93,7 +93,7 @@ it('should update task status when button is clicked', async () => {
     // Wait for the status update
     await waitFor(() => {
       // Assert that fetch was called
-      expect(global.fetch).toHaveBeenCalledTimes(1);
+      expect(global.fetch).toHaveBeenCalledTimes(1)
       // Assert that fetch was called with the correct arguments
       expect(global.fetch).toHaveBeenCalledWith('/api/updateTaskStatus', {
         method: 'PATCH',

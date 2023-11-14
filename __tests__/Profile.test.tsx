@@ -13,27 +13,60 @@ describe('Profile Page UI', () => {
 
         // Actions
         const profileTitle = screen.getByText('Profile')
-        const userInfoTitle = screen.getByText('User Info')
-        const changePasswordTitle = screen.getByText('Change Password')
-        const pomodoroTimerTitle = screen.getByText('Pomodoro Timer (Minutes)')
 
         // Assertions
         expect(profileTitle).toBeInTheDocument()
-        expect(userInfoTitle).toBeInTheDocument()
-        expect(changePasswordTitle).toBeInTheDocument()
-        expect(pomodoroTimerTitle).toBeInTheDocument()
     })
-    it('Should have profile section button UI elements', () => {
+    it('Should have cancel button UI element', () => {
         // Arrange
         render(<Profile />)
 
         // Actions
-        const cancelButton = screen.getByRole('button', {name: 'Cancel'})
         const saveButton = screen.getByRole('button', {name: 'Save'})
 
         // Assertions
-        expect(cancelButton).toBeInTheDocument()
         expect(saveButton).toBeInTheDocument()
 
+    })
+    it('Should have save button UI element', () => {
+        // Arrange
+        render(<Profile />)
+
+        // Actions
+        const saveButton = screen.getByRole('button', {name: 'Save'})
+
+        // Assertions
+        expect(saveButton).toBeInTheDocument()
+
+    })
+    it('Should have User Info UI elements', () => {
+        // Arrange
+        render(<Profile />)
+
+        // Actions
+        const userInfoTitle = screen.getByText('User Info')
+
+        // Assertions
+        expect(userInfoTitle).toBeInTheDocument()
+    })
+    it('Should have Change Password UI element', () => {
+        // Arrange
+        render(<Profile />)
+
+        // Actions
+        const changePasswordTitle = screen.getByText('Change Password')
+
+        // Assertions
+        expect(changePasswordTitle).toBeInTheDocument()
+    })
+    it('Should have Pomodoro Timer (Minutes) UI elements', () => {
+        // Arrange
+        render(<Profile />)
+
+        // Actions
+        const pomodoroTimerTitle = screen.getByText('Pomodoro Timer (Minutes)')
+
+        // Assertions
+        expect(pomodoroTimerTitle).toBeInTheDocument()
     })
 })

@@ -97,7 +97,7 @@ const Auth = () => {
                   rounded-[16px] ">{variant === 'login' ? 'Sign In' : 'Sign Up'}</button>
               </div>
               <div className="flex bg-crush-it-grey rounded-[10px] p-5 justify-center items-end">
-                <p className="">
+                <p>
                   {variant === 'login' ? 'First time using Crush It? ' : 'Already have an account? '}
                   <span className='text-crush-it-blue hover:underline cursor-pointer' onClick={toggleVariant}>
                   {variant === 'login' ? 'Create an account' : 'Sign in Here!'}
