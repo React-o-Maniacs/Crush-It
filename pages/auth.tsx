@@ -36,7 +36,7 @@ const Auth = () => {
 
 
   
-  const validatePassword = (args: {password: string, confirmPassword: string}): string | null => {
+  const validatePassword = useCallback( (args: {password: string, confirmPassword: string}): string | null => {
     if (password.length < 12) {
       toast.error('Password should be at least 12 characters long!');
       return "Password should be at least 12 characters long";
@@ -61,7 +61,7 @@ const Auth = () => {
     }
 
     return null;
-  };
+  }, [password, confirmPassword] );
 
   const login = useCallback(async () => {
     try {
