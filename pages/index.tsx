@@ -112,7 +112,19 @@ export default function Home() {
   const decrementMonthDropdownValue = () => {
     const currentIndex = monthsOptions.indexOf(selectedMonthOption);
     const newIndex = (currentIndex - 1 + monthsOptions.length) % monthsOptions.length;
-    setSelectedMonthOption(monthsOptions[newIndex]);
+    const newMonth = monthsOptions[newIndex];
+  
+    // Update the selected month
+    setSelectedMonthOption(newMonth);
+  
+    // Check if the current day is valid for the new month
+    const newDaysOptions = getDaysInMonth(Number(selectedYearOption), newIndex + 1).map(String);
+  
+    if (!newDaysOptions.includes(selectedDayOption)) {
+      // If the current day is not valid, set the day to the last day of the new month
+      setSelectedDayOption(newDaysOptions[newDaysOptions.length - 1]);
+      setDaysOptions(newDaysOptions);
+    }
   };
   
   const decrementDayDropdownValue = () => {
@@ -157,12 +169,24 @@ export default function Home() {
     }
   };
   
-
   const incrementMonthDropdownValue = () => {
     const currentIndex = monthsOptions.indexOf(selectedMonthOption);
     const newIndex = (currentIndex + 1) % monthsOptions.length;
-    setSelectedMonthOption(monthsOptions[newIndex]);
+    const newMonth = monthsOptions[newIndex];
+  
+    // Update the selected month
+    setSelectedMonthOption(newMonth);
+  
+    // Check if the current day is valid for the new month
+    const newDaysOptions = getDaysInMonth(Number(selectedYearOption), newIndex + 1).map(String);
+  
+    if (!newDaysOptions.includes(selectedDayOption)) {
+      // If the current day is not valid, set the day to the last day of the new month
+      setSelectedDayOption(newDaysOptions[newDaysOptions.length - 1]);
+      setDaysOptions(newDaysOptions);
+    }
   };
+  
 
   const incrementYearDropdownValue = () => {
     const currentIndex = yearsOptions.indexOf(selectedYearOption);
