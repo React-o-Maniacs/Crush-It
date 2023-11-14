@@ -12,8 +12,10 @@ import CreateTaskModal from "@/components/CreateTaskModal"
 import AddTaskIcon from '../public/images/add-task.svg'
 import Task, { TaskData } from "@/components/Task";
 
-function getDaysInMonth(month: number): number[] {
-  const maxDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+function getDaysInMonth(year: number, month: number): number[] {
+  // Check if it's a leap year (divisible by 4, not divisible by 100 unless also divisible by 400)
+  const isLeapYear = (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+  const maxDays = [31, 28 + (isLeapYear ? 1 : 0), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   if (month < 1 || month > 12) {
     throw new Error("Invalid month value. Month should be between 1 and 12.");
   }
@@ -45,15 +47,28 @@ export default function Home() {
   const monthsOptions = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
   const currentDate = new Date();
-  const [daysOptions, setDaysOptions] = useState<string[]>(getDaysInMonth(currentDate.getMonth() + 1).map(String));
 
   const currentMonth = monthsOptions[currentDate.getMonth()];
   const [selectedMonthOption, setSelectedMonthOption] = useState<string>(currentMonth);
 
+  const currentYear = currentDate.getFullYear();
+  const yearsOptions = Array.from({ length: 5 }, (_, index) => (currentYear + index).toString());
+  const [selectedYearOption, setSelectedYearOption] = useState<string>(currentYear.toString());
+
+  const [daysOptions, setDaysOptions] = useState<string[]>(getDaysInMonth(Number(selectedYearOption), currentDate.getMonth() + 1).map(String));
+
+  // Check if it's a leap year (divisible by 4, not divisible by 100 unless also divisible by 400)
+  const isLeapYear = (Number(selectedYearOption) % 4 === 0 && Number(selectedYearOption) % 100 !== 0) || (Number(selectedYearOption) % 400 === 0);
+
   const handleMonthSelect = (option: string) => {
+    // Check if the previous month was February in a leap year
+    const wasFebruaryLeapYear = monthsOptions.indexOf(selectedMonthOption) === 1 && isLeapYear;
     setSelectedMonthOption(option);
 
-    const daysInSelectedMonth = getDaysInMonth(monthsOptions.indexOf(option) + 1).map(String);
+    // Check if the current month is February and the year is a leap year
+    const isCurrentFebruaryLeapYear = monthsOptions.indexOf(option) === 1 && isLeapYear;
+
+    const daysInSelectedMonth = getDaysInMonth(Number(selectedYearOption), monthsOptions.indexOf(option) + 1).map(String);
   
     // Update the selected day to the maximum day if it exceeds the days in the selected month
     setSelectedDayOption((prevDay) => {
@@ -61,7 +76,12 @@ export default function Home() {
       return newDay.toString();
     });
   
+  // If transitioning from February in a leap year to another month, adjust the days in February
+  if (wasFebruaryLeapYear && !isCurrentFebruaryLeapYear) {
+    setDaysOptions(getDaysInMonth(Number(selectedYearOption), 2).map(String));
+  } else {
     setDaysOptions(daysInSelectedMonth);
+  }
   };
 
   const currentDay = currentDate.getDate().toString();
@@ -71,12 +91,19 @@ export default function Home() {
     setSelectedDayOption(option);
   };
 
-  const currentYear = currentDate.getFullYear();
-  const yearsOptions = Array.from({ length: 5 }, (_, index) => (currentYear + index).toString());
-  const [selectedYearOption, setSelectedYearOption] = useState<string>(currentYear.toString());
-
   const handleYearSelect = (option: string) => {
     setSelectedYearOption(option);
+
+    // Get the maximum number of days for the selected month and year
+    const daysInSelectedMonth = getDaysInMonth(Number(option), monthsOptions.indexOf(selectedMonthOption) + 1).map(String);
+
+    // Update the selected day to the maximum day if it exceeds the days in the selected month
+    setSelectedDayOption((prevDay) => {
+      const newDay = Math.min(Number(prevDay), daysInSelectedMonth.length);
+      return newDay.toString();
+    });
+
+    setDaysOptions(daysInSelectedMonth);
   };
 
   const [showCreateTaskModal, setShowCreateTaskModal] = useState(false);
