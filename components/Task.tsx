@@ -17,6 +17,7 @@ export interface TaskData {
   title: string;
   priority: TaskPriority;
   notes: string;
+  date: string;
   status: TaskStatus
 }
 
