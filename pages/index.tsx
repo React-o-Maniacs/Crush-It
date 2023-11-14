@@ -117,15 +117,46 @@ export default function Home() {
   
   const decrementDayDropdownValue = () => {
     const currentIndex = daysOptions.indexOf(selectedDayOption);
-    const newIndex = (currentIndex - 1 + daysOptions.length) % daysOptions.length;
-    setSelectedDayOption(daysOptions[newIndex]);
+  
+    if (currentIndex === 0) {
+      // If the current day is 1, switch to the previous month
+      const currentMonthIndex = monthsOptions.indexOf(selectedMonthOption);
+      const newMonthIndex = (currentMonthIndex - 1 + monthsOptions.length) % monthsOptions.length;
+      const newMonth = monthsOptions[newMonthIndex];
+  
+      // Set the day to the maximum day in the new month
+      const newDaysOptions = getDaysInMonth(Number(selectedYearOption), newMonthIndex + 1).map(String);
+      setSelectedDayOption(newDaysOptions[newDaysOptions.length - 1]);
+      setDaysOptions(newDaysOptions);
+  
+      // Update the selected month
+      setSelectedMonthOption(newMonth);
+    } else {
+      // Decrement the day within the current month
+      const newIndex = (currentIndex - 1 + daysOptions.length) % daysOptions.length;
+      setSelectedDayOption(daysOptions[newIndex]);
+    }
   };
 
   const decrementYearDropdownValue = () => {
     const currentIndex = yearsOptions.indexOf(selectedYearOption);
     const newIndex = (currentIndex - 1 + yearsOptions.length) % yearsOptions.length;
-    setSelectedYearOption(yearsOptions[newIndex]);
+    const newYear = yearsOptions[newIndex];
+  
+    // Update the selected year
+    setSelectedYearOption(newYear);
+  
+    // Check if the current day is valid for the new month
+    const currentMonthIndex = monthsOptions.indexOf(selectedMonthOption);
+    const newDaysOptions = getDaysInMonth(Number(newYear), currentMonthIndex + 1).map(String);
+  
+    if (!newDaysOptions.includes(selectedDayOption)) {
+      // If the current day is not valid, set the day to the last day of the new month
+      setSelectedDayOption(newDaysOptions[newDaysOptions.length - 1]);
+      setDaysOptions(newDaysOptions);
+    }
   };
+  
 
   const incrementMonthDropdownValue = () => {
     const currentIndex = monthsOptions.indexOf(selectedMonthOption);
