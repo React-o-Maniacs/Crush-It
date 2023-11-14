@@ -271,31 +271,31 @@ export default function Home() {
           </div>
           <div className="flex bg-crush-it-blue bg-opacity-[15%] rounded-[10px] m-4 p-3 justify-center">
             <button onClick={decrementMonthDropdownValue} className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3">
-                <Image className='scale-125' src={ArrowIcon} alt="Arrow Icon" />
+                <Image className='scale-125' src={ArrowIcon} alt="Arrow Icon Previous Month" />
             </button>
             <div className="flex ml-2">
               <Dropdown selectedOption={selectedMonthOption} options={monthsOptions} onChange={handleMonthSelect} widthStyle="w-[200px]" />
             </div>
             <button onClick={incrementMonthDropdownValue} className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-2">
-                <Image className='scale-125 rotate-180' src={ArrowIcon} alt="Arrow Icon" />
+                <Image className='scale-125 rotate-180' src={ArrowIcon} alt="Arrow Icon Next Month" />
             </button>
             <button onClick={decrementDayDropdownValue} className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-6">
-                <Image className='scale-125' src={ArrowIcon} alt="Arrow Icon" />
+                <Image className='scale-125' src={ArrowIcon} alt="Arrow Icon Previous Day" />
             </button>
             <div className="flex ml-2">
               <Dropdown selectedOption={selectedDayOption} options={daysOptions} onChange={handleDaySelect} widthStyle="w-[100px]" />
             </div>
             <button onClick={incrementDayDropdownValue} className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-2">
-              <Image className='scale-125 rotate-180' src={ArrowIcon} alt="Arrow Icon" />
+              <Image className='scale-125 rotate-180' src={ArrowIcon} alt="Arrow Icon Next Day" />
             </button>
             <button onClick={decrementYearDropdownValue} className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-6">
-                <Image className='scale-125' src={ArrowIcon} alt="Arrow Icon" />
+                <Image className='scale-125' src={ArrowIcon} alt="Arrow Icon Previous Year" />
             </button>
             <div className="flex ml-2">
               <Dropdown selectedOption={selectedYearOption} options={yearsOptions} onChange={handleYearSelect} widthStyle="w-[115px]" />
             </div>
             <button onClick={incrementYearDropdownValue} className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-2">
-              <Image className='scale-125 rotate-180' src={ArrowIcon} alt="Arrow Icon" />
+              <Image className='scale-125 rotate-180' src={ArrowIcon} alt="Arrow Icon Next Year" />
             </button>
           </div>
           <div className="container p-4">
