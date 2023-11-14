@@ -77,6 +77,11 @@ const Auth = () => {
   }, [email, password]);
 
   const register = useCallback(async () => {
+    const validationError = validatePassword(password, confirmPassword);
+    if (validationError) {
+      toast.error("Failed to validate password!");
+      return;
+    }
     try {
       // toast("Testing start!");
       await validatePassword(password, confirmPassword);
