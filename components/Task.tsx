@@ -206,7 +206,7 @@ const Task: React.FC<TaskProps> = ({ task }) => {
                   <div className="font-bold text-lg text-crush-it-orange ml-2 mr-4 rounded">{numOfPomodoroTimers}</div>
                   <Image
                   src={pencilIcon}
-                  alt="Pencil Icon"
+                  alt="Pencil Icon For Pomo"
                   />
                 </>
               ) : (
@@ -252,7 +252,7 @@ const Task: React.FC<TaskProps> = ({ task }) => {
                   <>
                     <Image
                     src={pencilIcon}
-                    alt="Pencil Icon"
+                    alt="Pencil Icon For Note"
                     />
                   </>
                 ) : (
