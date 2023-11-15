@@ -190,7 +190,20 @@ export default function Home() {
   const incrementYearDropdownValue = () => {
     const currentIndex = yearsOptions.indexOf(selectedYearOption);
     const newIndex = (currentIndex + 1) % yearsOptions.length;
-    setSelectedYearOption(yearsOptions[newIndex]);
+    const newYear = yearsOptions[newIndex];
+
+    setSelectedYearOption(newYear);
+  
+    // Get the maximum number of days for the selected month and year
+    const daysInSelectedMonth = getDaysInMonth(Number(newYear), monthsOptions.indexOf(selectedMonthOption) + 1).map(String);
+
+    // Update the selected day to the maximum day if it exceeds the days in the selected month
+    setSelectedDayOption((prevDay) => {
+      const newDay = Math.min(Number(prevDay), daysInSelectedMonth.length);
+      return newDay.toString();
+    });
+
+    setDaysOptions(daysInSelectedMonth);
   };
 
   const incrementDayDropdownValue = () => {
