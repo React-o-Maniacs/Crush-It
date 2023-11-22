@@ -11,6 +11,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import CreateTaskModal from "@/components/CreateTaskModal"
 import AddTaskIcon from '../public/images/add-task.svg'
 import Task, { TaskData } from "@/components/Task";
+import TimerModal from "@/components/TimerModal";
 
 function getDaysInMonth(year: number, month: number): number[] {
   // Check if it's a leap year (divisible by 4, not divisible by 100 unless also divisible by 400)
@@ -107,6 +108,7 @@ export default function Home() {
   };
 
   const [showCreateTaskModal, setShowCreateTaskModal] = useState(false);
+  const [showTimerModal, setShowTimerModal] = useState(true);
   const date = `${monthsOptions.indexOf(selectedMonthOption) + 1}/${selectedDayOption}/${selectedYearOption}`;
 
   const decrementMonthDropdownValue = () => {
@@ -343,7 +345,10 @@ export default function Home() {
       {showCreateTaskModal && (
         <CreateTaskModal isVisible={showCreateTaskModal} onClose={() => setShowCreateTaskModal(false)} date={date} onTaskAdded={fetchTasks} />
       )}
-        </div>
+      {showTimerModal && (
+        <TimerModal isVisible={showTimerModal} onClose={() => setShowTimerModal(false)} />
+       )} 
+      </div>
       </div>
     </>
     
