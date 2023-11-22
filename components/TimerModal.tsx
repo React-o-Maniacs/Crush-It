@@ -60,7 +60,7 @@ const TimerModal: React.FC<TimerModalProps> = ({ isVisible, onClose }) => {
               <Image src={CloseIcon} alt="Close Icon" />
             </button>
           </nav>
-          <div className='w-[540px] h-[254px] bg-crush-it-grey rounded-[8px] mt-4'>
+          <div className='w-[540px] h-[255px] bg-crush-it-grey rounded-[8px] mt-4'>
             <h1 className="text-[100px] font-bold text-center">25:00</h1>
             <div className="flex justify-center mt-4">
               <button
