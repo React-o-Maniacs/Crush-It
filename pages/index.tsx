@@ -345,8 +345,8 @@ export default function Home() {
               </button>
             </div>
           <div className="flex container p-4">
-            {/* Tasks Section */}
-            <div className="flex-1">
+            {/* Tasks Section 66% */}
+            <div className="flex-1 min-w-[66%]"> 
               <div className="flex items-center">
                 <h1 className="text-3xl font-bold mb-2">Tasks</h1>
                 <button
@@ -368,8 +368,8 @@ export default function Home() {
                 ))}
               </div>
             </div>
-            {/* Appointments Section */}
-            <div className="flex-1 ml-4">
+            {/* Appointments Section 45% */}
+            <div className="flex-1 ml-4 min-w-[45%]">
               <h1 className="text-3xl font-bold mb-2 py-1">Appointments</h1>
               <div className="bg-white shadow rounded-lg p-2 relative overflow-y-scroll custom-scrollbar min-h-[640px]">
                 {/* 24-hour timeline */}
