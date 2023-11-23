@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent; /* Hide the default track */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #6284FF; /* Your custom color from Tailwind config */
+  border-radius: 10px;
+}
+
+.custom-scrollbar-track {
+  position: absolute;
+  top: 0;
+  right: 0; /* Adjust based on layout */
+  width: 6px;
+  background-color: #6284FF; /* Your preferred color for the track */
+}
+

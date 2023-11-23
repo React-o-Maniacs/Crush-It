@@ -12,6 +12,7 @@ import CreateTaskModal from "@/components/CreateTaskModal"
 import AddTaskIcon from '../public/images/add-task.svg'
 import Task, { TaskData } from "@/components/Task";
 import TimerModal from "@/components/TimerModal";
+import Appointment, { AppointmentData } from "@/components/Appointment";
 
 function getDaysInMonth(year: number, month: number): number[] {
   // Check if it's a leap year (divisible by 4, not divisible by 100 unless also divisible by 400)
@@ -273,84 +274,131 @@ export default function Home() {
     fetchTasks();
   }, []);
 
-  return (
-    <>
-      <Toaster position="top-right" />
-      <div className="flex min-h-screen">
-        <SideBanner />
-        <div className="flex-1 flex flex-col">
-          <div className="bg-white p-4 shadow-md">
-            <div className="flex justify-end">
-              <ProfileAvatar name={(user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}`.trim() : user?.userName || ""}/>
+  const [appointments, setAppointments] = useState<AppointmentData[]>([]);
+    const fetchAppointments = async () => {
+      try {
+        const response = await fetch('/api/retrieveAppointment');
+        if (response.ok) {
+          const data = await response.json();
+          setAppointments(data);
+        } else {
+          console.error('Failed to fetch appointments');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    useEffect(() => {
+      fetchAppointments();
+    }, []);
+
+    console.log(appointments);
+    function calculateAppointmentPosition(startTime: number) {
+      // Convert start time to pixels (1 hour = 60 pixels)
+      return startTime * 60;
+    }
+
+    function calculateAppointmentHeight(startTime: number, endTime: number) {
+      // Calculate duration in hours and convert to pixels
+      return (endTime - startTime) * 60;
+    }
+
+    return (
+      <>
+        <Toaster position="top-right" />
+        <div className="flex min-h-screen bg-crush-it-grey">
+          <SideBanner />
+          <div className="flex-1 flex flex-col">
+            <div className="bg-white p-4 shadow-md">
+              <div className="flex justify-end">
+                <ProfileAvatar name={(user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}`.trim() : user?.userName || ""}/>
+              </div>
             </div>
-          </div>
-          <div className="flex bg-crush-it-blue bg-opacity-[15%] rounded-[10px] m-4 p-3 justify-center">
-            <button onClick={decrementMonthDropdownValue} className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3">
-                <Image className='scale-125' src={ArrowIcon} alt="Arrow Icon Previous Month" />
-            </button>
-            <div className="flex ml-2">
-              <Dropdown selectedOption={selectedMonthOption} options={monthsOptions} onChange={handleMonthSelect} widthStyle="w-[200px]" />
+            <div className="flex bg-crush-it-blue bg-opacity-[15%] rounded-[10px] m-4 p-3 justify-center">
+              <button onClick={decrementMonthDropdownValue} className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3">
+                  <Image className='scale-125' src={ArrowIcon} alt="Arrow Icon Previous Month" />
+              </button>
+              <div className="flex ml-2">
+                <Dropdown selectedOption={selectedMonthOption} options={monthsOptions} onChange={handleMonthSelect} widthStyle="w-[200px]" />
+              </div>
+              <button onClick={incrementMonthDropdownValue} className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-2">
+                  <Image className='scale-125 rotate-180' src={ArrowIcon} alt="Arrow Icon Next Month" />
+              </button>
+              <button onClick={decrementDayDropdownValue} className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-6">
+                  <Image className='scale-125' src={ArrowIcon} alt="Arrow Icon Previous Day" />
+              </button>
+              <div className="flex ml-2">
+                <Dropdown selectedOption={selectedDayOption} options={daysOptions} onChange={handleDaySelect} widthStyle="w-[100px]" />
+              </div>
+              <button onClick={incrementDayDropdownValue} className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-2">
+                <Image className='scale-125 rotate-180' src={ArrowIcon} alt="Arrow Icon Next Day" />
+              </button>
+              <button onClick={decrementYearDropdownValue} className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-6">
+                  <Image className='scale-125' src={ArrowIcon} alt="Arrow Icon Previous Year" />
+              </button>
+              <div className="flex ml-2">
+                <Dropdown selectedOption={selectedYearOption} options={yearsOptions} onChange={handleYearSelect} widthStyle="w-[115px]" />
+              </div>
+              <button onClick={incrementYearDropdownValue} className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-2">
+                <Image className='scale-125 rotate-180' src={ArrowIcon} alt="Arrow Icon Next Year" />
+              </button>
             </div>
-            <button onClick={incrementMonthDropdownValue} className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-2">
-                <Image className='scale-125 rotate-180' src={ArrowIcon} alt="Arrow Icon Next Month" />
-            </button>
-            <button onClick={decrementDayDropdownValue} className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-6">
-                <Image className='scale-125' src={ArrowIcon} alt="Arrow Icon Previous Day" />
-            </button>
-            <div className="flex ml-2">
-              <Dropdown selectedOption={selectedDayOption} options={daysOptions} onChange={handleDaySelect} widthStyle="w-[100px]" />
-            </div>
-            <button onClick={incrementDayDropdownValue} className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-2">
-              <Image className='scale-125 rotate-180' src={ArrowIcon} alt="Arrow Icon Next Day" />
-            </button>
-            <button onClick={decrementYearDropdownValue} className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-6">
-                <Image className='scale-125' src={ArrowIcon} alt="Arrow Icon Previous Year" />
-            </button>
-            <div className="flex ml-2">
-              <Dropdown selectedOption={selectedYearOption} options={yearsOptions} onChange={handleYearSelect} widthStyle="w-[115px]" />
-            </div>
-            <button onClick={incrementYearDropdownValue} className="h-[50px] w-[50px] rounded-[10px] border border-crush-it-blue p-3 ml-2">
-              <Image className='scale-125 rotate-180' src={ArrowIcon} alt="Arrow Icon Next Year" />
-            </button>
-          </div>
-          <div className="container p-4">
-        <div className="flex items-center">
-          <h1 className="text-3xl font-bold mb-2">Tasks</h1>
-          <button
-            className="ml-2 border-3 border-solid border-white p-2"
-            onClick={() => setShowCreateTaskModal(true)}
-          >
-            <Image src={AddTaskIcon} alt="Add Task Icon" />
-          </button>
-        </div>
-        <div className="flex">
-          {/* Tasks Section with white container */}
-          <div className="flex-1 bg-white shadow rounded-lg p-4">
-            {priorities.map((priority) => (
-              <div key={priority} className="bg-crush-it-grey p-4 my-6 rounded">
-                <h3 className="text-xl font-bold mb-2">{priority}</h3>
-                {/* Tasks go here in the future */}
-                {tasks.filter(task => task.priority === priority && task.date === date).map(task => (
-                  <Task key={task.id} task={task} />
+          <div className="flex container p-4">
+            {/* Tasks Section */}
+            <div className="flex-1">
+              <div className="flex items-center">
+                <h1 className="text-3xl font-bold mb-2">Tasks</h1>
+                <button
+                  className="ml-2 border-3 border-solid border-white p-2"
+                  onClick={() => setShowCreateTaskModal(true)}
+                >
+                  <Image src={AddTaskIcon} alt="Add Task Icon" />
+                </button>
+              </div>
+              <div className="bg-white shadow rounded-lg p-4">
+                {/* Tasks content */}
+                {priorities.map((priority) => (
+                  <div key={priority} className="bg-crush-it-grey p-4 my-6 rounded">
+                    <h3 className="text-xl font-bold mb-2">{priority}</h3>
+                    {tasks.filter(task => task.priority === priority && task.date === date).map(task => (
+                      <Task key={task.id} task={task} />
+                    ))}
+                  </div>
                 ))}
               </div>
-            ))}
+            </div>
+            {/* Appointments Section */}
+            <div className="flex-1 ml-4">
+              <h1 className="text-3xl font-bold mb-2 py-1">Appointments</h1>
+              <div className="bg-white shadow rounded-lg p-2 relative overflow-y-scroll custom-scrollbar min-h-[640px]">
+                {/* 24-hour timeline */}
+                {[...Array(24)].map((_, hour) => (
+                  <div key={hour} className="absolute left-0 w-full py-12" style={{ top: `${hour * 60}px` }}>
+                    <span className="text-md pl-4">{`${hour % 12 || 12} ${hour >= 12 ? 'PM' : 'AM'}`}</span>
+                  </div>
+                ))}
+                {/* Render Appointments */}
+                {appointments.map(appointment => (
+                  <Appointment 
+                    key={appointment.id} 
+                    id={appointment.id} 
+                    title={appointment.title} 
+                    startTime={appointment.startTime} 
+                    endTime={appointment.endTime} 
+                  />
+                ))}
+              </div>
+            </div>
           </div>
-          {/* Appointments Section placeholder */}
-          <div className="flex-1">
-            {/* Appointment components will go here later */}
-          </div>
-        </div>
       </div>
       {showCreateTaskModal && (
         <CreateTaskModal isVisible={showCreateTaskModal} onClose={() => setShowCreateTaskModal(false)} date={date} onTaskAdded={fetchTasks} />
       )}
       {showTimerModal && (
         <TimerModal isVisible={showTimerModal} onClose={() => setShowTimerModal(false)} />
-       )} 
-      </div>
-      </div>
-    </>
-    
-  );
-}
+      )}
+    </div>
+  </>
+);
+      }
