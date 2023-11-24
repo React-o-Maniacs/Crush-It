@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import CloseIcon from '../public/images/close-circle.svg';
 import PencilIcon from "../public/images/pencil.svg";
@@ -15,6 +15,20 @@ const TimerModal: React.FC<TimerModalProps> = ({ isVisible, onClose }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [pomos, setPomos] = useState<string>('0/3');
   const [finishAt, setFinishAt] = useState<string>('19:53 (1.4h)');
+  const [timer, setTimer] = useState<number>(25 * 60); // Initial timer value in seconds
+  const [timerRunning, setTimerRunning] = useState<boolean>(false);
+
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout;
+
+    if (timerRunning && timer > 0) {
+      intervalId = setInterval(() => {
+        setTimer((prevTimer) => prevTimer - 1);
+      }, 1000);
+    }
+
+    return () => clearInterval(intervalId);
+  }, [timerRunning, timer]);
 
   if (!isVisible) return null;
 
@@ -27,6 +41,16 @@ const TimerModal: React.FC<TimerModalProps> = ({ isVisible, onClose }) => {
   const handleButtonClick = (buttonType: string) => {
     setSelectedButton(buttonType);
     // Add logic to handle button click if needed
+  };
+
+  const startTimer = () => {
+    setTimerRunning(true);
+    toast.success('Timer Started!');
+  };
+
+  const stopTimer = () => {
+    setTimerRunning(false);
+    toast.success('Timer Stopped!');
   };
 
   return (
@@ -61,13 +85,17 @@ const TimerModal: React.FC<TimerModalProps> = ({ isVisible, onClose }) => {
             </button>
           </nav>
           <div className='w-[540px] h-[255px] bg-crush-it-grey rounded-[8px] mt-4'>
-            <h1 className="text-[100px] font-bold text-center">25:00</h1>
+            <h1 className="text-[100px] font-bold text-center">
+              {`${Math.floor(timer / 60)
+                .toString()
+                .padStart(2, '0')}:${(timer % 60).toString().padStart(2, '0')}`}
+            </h1>
             <div className="flex justify-center mt-4">
               <button
                 className="bg-crush-it-blue text-white font-bold text-[18px] px-4 py-2 w-[158px] h-[54px] rounded-[16px]"
-                onClick={() => toast.success('Timer Started!')}
+                onClick={timerRunning ? stopTimer : startTimer}
               >
-                Start
+                {timerRunning ? 'Stop' : 'Start'}
               </button>
             </div>
           </div>
@@ -76,10 +104,10 @@ const TimerModal: React.FC<TimerModalProps> = ({ isVisible, onClose }) => {
           </h1>
           <div className="w-[540px] h-[109px] rounded-[8px] bg-crush-it-grey p-4 mt-2">
             <div className="flex justify-between">
-            <label className="font-bold text-crush-it-blue text-[16px]"> Notes: </label>
-            <button className='' onClick={() => setIsEditing(!isEditing)}>
+              <label className="font-bold text-crush-it-blue text-[16px]"> Notes: </label>
+              <button className='' onClick={() => setIsEditing(!isEditing)}>
                 <Image src={PencilIcon} alt="Pencil Icon For Notes" />
-            </button>
+              </button>
             </div>
             <textarea
               className="w-[500px] h-[40px] leading-[18px] text-[14px] text-crush-it-text-black font-medium p-1 bg-inherit mt-2"
