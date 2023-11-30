@@ -94,9 +94,10 @@ const updateTaskInDatabase = async (taskId: String, newNumOfPomodoroTimers?: num
 
 interface TaskProps {
   task: TaskData;
+  onTaskTitleClick: (task: TaskData) => void;
 }
 
-const Task: React.FC<TaskProps> = ({ task }) => {
+const Task: React.FC<TaskProps> = ({ task, onTaskTitleClick }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [TaskStatus, setTaskStatus] = useState<TaskStatus>(task.status || 'Not Started');
   const [isClickedForPomo, setIsClickedForPomo] = useState(false);
@@ -152,8 +153,6 @@ const Task: React.FC<TaskProps> = ({ task }) => {
     setNumOfPomodoroTimers(prevTimers => prevTimers > 0 ? prevTimers - 1 : 0);
   };
 
-  
-
     // Check if the status is valid before rendering
     if (!taskStatuses[TaskStatus]) {
       toast.error("Error with Status");
@@ -176,7 +175,7 @@ const Task: React.FC<TaskProps> = ({ task }) => {
             alt="Task Status"
           />
         </button>
-        <span className="flex-1 text-crush-it-blue font-bold text-lg">{task.title}</span>
+        <span className="flex-1 text-crush-it-blue font-bold text-lg" onClick={() => onTaskTitleClick(task)}>{task.title}</span>
         {/* Add more elements here if needed */}
         <button className="p-2 ml-2 rounded">
           <Image

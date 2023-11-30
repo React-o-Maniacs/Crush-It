@@ -3,20 +3,48 @@ import toast, { Toaster } from 'react-hot-toast';
 import CloseIcon from '../public/images/close-circle.svg';
 import PencilIcon from "../public/images/pencil.svg";
 import Image from 'next/image';
+import { TaskData } from './Task';
+import blueRectangle from "../public/images/blue-rectangle-for-check.svg";
+import CheckIcon from '../public/images/check-icon.svg';
 
 interface TimerModalProps {
   isVisible: boolean;
   onClose: () => void;
+  task: TaskData | null;
+  user: { pomodoro: number; shortBreak: number; longBreak: number };
 }
 
-const TimerModal: React.FC<TimerModalProps> = ({ isVisible, onClose }) => {
+const TimerModal: React.FC<TimerModalProps> = ({ isVisible, onClose, task, user }) => {
   const [selectedButton, setSelectedButton] = useState<string>('pomodoro');
-  const [notes, setNotes] = useState<string>('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
+  const [notes, setNotes] = useState<string>(task?.notes || '');
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [pomos, setPomos] = useState<string>('0/3');
-  const [finishAt, setFinishAt] = useState<string>('19:53 (1.4h)');
-  const [timer, setTimer] = useState<number>(25 * 60); // Initial timer value in seconds
+  const [maxPomos, setMaxPomos] = useState<number>(task?.numOfPomodoroTimers || 0);
+  const [pomos, setPomos] = useState<number>(0);
+  const [timer, setTimer] = useState<number>(25 * 60);
+  const [finishAt, setFinishAt] = useState<string>('Not started');
   const [timerRunning, setTimerRunning] = useState<boolean>(false);
+
+  const pomodoroTimer = user?.pomodoro;
+  const shortBreakTimer = user?.shortBreak;
+  const longBreakTimer = user?.longBreak;
+
+  const selectedTimer = () => {
+    switch (selectedButton) {
+      case 'pomodoro':
+        return pomodoroTimer;
+      case 'shortBreak':
+        return shortBreakTimer;
+      case 'longBreak':
+        return longBreakTimer;
+      default:
+        return 25; // Default to 25 minutes if no matching case
+    }
+  };
+
+  useEffect(() => {
+    setTimer(selectedTimer() * 60); // Convert timer to seconds
+  }, [selectedButton, pomodoroTimer, shortBreakTimer, longBreakTimer]);
+
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
@@ -25,10 +53,47 @@ const TimerModal: React.FC<TimerModalProps> = ({ isVisible, onClose }) => {
       intervalId = setInterval(() => {
         setTimer((prevTimer) => prevTimer - 1);
       }, 1000);
-    }
+    } else if (timerRunning && timer === 0) {
+      setTimerRunning(false);
 
+      // Logic to switch to the next timer based on the current selectedButton
+      switch (selectedButton) {
+        case 'pomodoro':
+          setPomos(pomos + 1);
+          setSelectedButton('shortBreak');
+          setTimer(shortBreakTimer * 60);
+          toast.success('Pomodoro completed! Switched to Short Break.');
+          break;
+        case 'shortBreak':
+          setSelectedButton('pomodoro');
+          setTimer(pomodoroTimer * 60);
+          toast.success('Short Break completed! Switched to Pomodoro.');
+          break;
+        // Add similar cases for other timer types if needed
+        default:
+          break;
+      }
+
+      setFinishAt('Not started');
+      setTimerRunning(false);
+      // Optionally, you can automatically start the new timer
+      // startTimer();
+    }
+  
     return () => clearInterval(intervalId);
-  }, [timerRunning, timer]);
+  }, [timerRunning, timer, selectedButton, pomodoroTimer, shortBreakTimer]);
+
+  // Function to calculate the finish time based on the selected timer
+  const calculateFinishTime = (timerType: string): string => {
+    const now = new Date();
+    const timerDuration = selectedTimer() * 60 * 1000; // Convert timer to milliseconds
+    const finishTime = new Date(now.getTime() + timerDuration);
+
+    const finishHours = finishTime.getHours().toString().padStart(2, '0');
+    const finishMinutes = finishTime.getMinutes().toString().padStart(2, '0');
+
+    return `${finishHours}:${finishMinutes} (${(timerDuration / (60 * 1000)).toFixed(1)}h)`;
+  };
 
   if (!isVisible) return null;
 
@@ -40,12 +105,14 @@ const TimerModal: React.FC<TimerModalProps> = ({ isVisible, onClose }) => {
 
   const handleButtonClick = (buttonType: string) => {
     setSelectedButton(buttonType);
-    // Add logic to handle button click if needed
+    setFinishAt('Not started');
+    setTimerRunning(false);
   };
 
   const startTimer = () => {
     setTimerRunning(true);
     toast.success('Timer Started!');
+    setFinishAt(calculateFinishTime(selectedButton)); // Update finishAt when a timer is started
   };
 
   const stopTimer = () => {
@@ -106,7 +173,10 @@ const TimerModal: React.FC<TimerModalProps> = ({ isVisible, onClose }) => {
             <div className="flex justify-between">
               <label className="font-bold text-crush-it-blue text-[16px]"> Notes: </label>
               <button className='' onClick={() => setIsEditing(!isEditing)}>
-                <Image src={PencilIcon} alt="Pencil Icon For Notes" />
+                {isEditing ? <div className="relative flex items-center justify-center">
+                    <Image src={blueRectangle} alt="Background" className="w-full h-auto" />
+                    <Image src={CheckIcon} alt="Foreground" className="absolute w-2/4 h-auto" />
+                  </div> : <Image src={PencilIcon} alt="Pencil Icon For Notes" />}
               </button>
             </div>
             <textarea
@@ -119,7 +189,7 @@ const TimerModal: React.FC<TimerModalProps> = ({ isVisible, onClose }) => {
           </div>
           <div className='flex bg-crush-it-black w-[540px] h-[70px] rounded-[8px] border-[1px] border-crush-it-blue mt-2 p-4 items-center justify-center'>
             <p className="font-bold text-white text-[20px] leading-[25px]"> Pomos: </p>
-            <p className="font-bold text-[#407BFF] text-[20px] leading-[25px] ml-2"> {pomos} </p>
+            <p className="font-bold text-[#407BFF] text-[20px] leading-[25px] ml-2"> {`${pomos}/${maxPomos}`} </p>
             <p className="font-bold text-white text-[20px] leading-[25px] ml-8"> Finish At: </p>
             <p className="font-bold text-[#407BFF] text-[20px] leading-[25px] ml-2"> {finishAt} </p>
           </div>
