@@ -109,7 +109,9 @@ export default function Home() {
   };
 
   const [showCreateTaskModal, setShowCreateTaskModal] = useState(false);
-  const [showTimerModal, setShowTimerModal] = useState(true);
+  const [showTimerModal, setShowTimerModal] = useState(false);
+  const [timerModalTask, setTimerModalTask] = useState<TaskData | null>(null);
+
   const date = `${monthsOptions.indexOf(selectedMonthOption) + 1}/${selectedDayOption}/${selectedYearOption}`;
 
   const decrementMonthDropdownValue = () => {
@@ -304,6 +306,12 @@ export default function Home() {
       return (endTime - startTime) * 60;
     }
 
+    const handleTaskTitleClick = (selectedTask: TaskData) => {
+      // Open TimerModal and pass the selected task
+      setShowTimerModal(true);
+      setTimerModalTask(selectedTask);
+    };
+
     return (
       <>
         <Toaster position="top-right" />
@@ -362,7 +370,7 @@ export default function Home() {
                   <div key={priority} className="bg-crush-it-grey p-4 my-6 rounded">
                     <h3 className="text-xl font-bold mb-2">{priority}</h3>
                     {tasks.filter(task => task.priority === priority && task.date === date).map(task => (
-                      <Task key={task.id} task={task} />
+                      <Task key={task.id} task={task} onTaskTitleClick={handleTaskTitleClick} />
                     ))}
                   </div>
                 ))}
@@ -396,7 +404,7 @@ export default function Home() {
         <CreateTaskModal isVisible={showCreateTaskModal} onClose={() => setShowCreateTaskModal(false)} date={date} onTaskAdded={fetchTasks} />
       )}
       {showTimerModal && (
-        <TimerModal isVisible={showTimerModal} onClose={() => setShowTimerModal(false)} />
+        <TimerModal isVisible={showTimerModal} onClose={() => setShowTimerModal(false)} task={timerModalTask} user={user} />
       )}
     </div>
   </>

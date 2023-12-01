@@ -42,8 +42,8 @@ describe('Profile Page UI', () => {
   it('renders tasks and filters them by priority', async () => {
     render(<Index />);
     await waitFor(() => {
-      const task1 = screen.getByText('Task 1')
-      const task2 = screen.getByText('Task 2')
+      const task1 = screen.getAllByText('Task 1')
+      const task2 = screen.getAllByText('Task 2')
 
       expect(task1).toBeInTheDocument()
       expect(task2).toBeInTheDocument()
