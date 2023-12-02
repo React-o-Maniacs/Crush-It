@@ -53,7 +53,7 @@ const Auth = () => {
         <div className="flex">
         <div className="flex flex-1 h-screen max-w-[65%] rounded-r-[10px] bg-crush-it-black bg-cover items-center z-0">
           <div className='flex flex-1 flex-col items-center'>
-            <h1 className="flex font-normal text-[90px] text-white ">Crush It</h1>
+            <h1 className="flex font-Fredoka font-bold text-[90px] text-white ">Crush It</h1>
             <Image src={CrushItLogo} alt='Crush It Logo' width={600} height={600}/>
           </div>
           <div className="flex h-[80%] w-[60%] z-2 mr-[-50%] shadow-2xl">

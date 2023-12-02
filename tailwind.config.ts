@@ -19,6 +19,10 @@ const config: Config = {
         'crush-it-orange': '#FE754D',
         'crush-it-border-grey': '#E2EAF1'
       },
+      fontFamily: {
+        'sans': ['DM Sans'],
+        'Fredoka': ['Fredoka']
+      }
     },
   },
   plugins: [],
