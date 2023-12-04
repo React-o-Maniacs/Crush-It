@@ -34,6 +34,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         hashedPassword,
         image: '',
         emailVerified: new Date(),
+        pomodoro: 25,
+        shortBreak: 5,
+        longBreak: 15,
       }
     });
 
