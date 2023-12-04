@@ -379,7 +379,7 @@ export default function Home() {
             {/* Appointments Section 45% */}
             <div className="flex-1 ml-4 min-w-[45%]">
               <h1 className="text-3xl font-bold mb-2 py-1">Appointments</h1>
-              <div className="bg-white shadow rounded-lg p-2 relative overflow-y-scroll custom-scrollbar min-h-[640px]">
+              <div className="bg-white shadow rounded-[10px] p-2 relative overflow-y-scroll custom-scrollbar min-h-[640px]">
                 {/* 24-hour timeline */}
                 {[...Array(24)].map((_, hour) => (
                   <div key={hour} className="absolute left-0 w-full py-12" style={{ top: `${hour * 60}px` }}>
