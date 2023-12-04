@@ -46,6 +46,7 @@ const Appointment: React.FC<AppointmentData> = ({ id, title, startTime, endTime 
 
   return (
     <div
+      data-testid="appointment"
       className="absolute left-0 right-0 ml-20 mr-2 bg-white p-2 shadow border border-crush-it-border-grey"
       style={appointmentStyle}
     >
