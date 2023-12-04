@@ -370,7 +370,8 @@ export default function Home() {
                   <div key={priority} className="bg-crush-it-grey p-4 my-6 rounded">
                     <h3 className="text-xl font-bold mb-2">{priority}</h3>
                     {tasks.filter(task => task.priority === priority && task.date === date).map(task => (
-                      <Task key={task.id} task={task} onTaskTitleClick={handleTaskTitleClick} />
+                      <Task key={task.id} task={task} onTaskTitleClick={handleTaskTitleClick} onTaskUpdate={fetchTasks} // Pass fetchTasks as a prop
+                      />
                     ))}
                   </div>
                 ))}

@@ -95,9 +95,10 @@ const updateTaskInDatabase = async (taskId: String, newNumOfPomodoroTimers?: num
 interface TaskProps {
   task: TaskData;
   onTaskTitleClick: (task: TaskData) => void;
+  onTaskUpdate: () => void; 
 }
 
-const Task: React.FC<TaskProps> = ({ task, onTaskTitleClick }) => {
+const Task: React.FC<TaskProps> = ({ task, onTaskTitleClick, onTaskUpdate }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [TaskStatus, setTaskStatus] = useState<TaskStatus>(task.status || 'Not Started');
   const [isClickedForPomo, setIsClickedForPomo] = useState(false);
@@ -119,6 +120,7 @@ const Task: React.FC<TaskProps> = ({ task, onTaskTitleClick }) => {
       console.error(`Next status not found for current status: ${TaskStatus}`);
     }
     await updateTaskStatus(task.id, nextStatus);
+    onTaskUpdate();
   };
 
   const handleNotesChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -135,6 +137,7 @@ const Task: React.FC<TaskProps> = ({ task, onTaskTitleClick }) => {
     newNotes?: string
   ) => {
     await updateTaskInDatabase(taskId, newNumOfPomodoroTimers, newNotes);
+    onTaskUpdate();
   };
   
   const handleClickForPomo = () => {
