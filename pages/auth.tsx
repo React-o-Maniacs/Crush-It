@@ -53,14 +53,15 @@ const Auth = () => {
         <div className="flex">
         <div className="flex flex-1 h-screen max-w-[65%] rounded-r-[10px] bg-crush-it-black bg-cover items-center z-0">
           <div className='flex flex-1 flex-col items-center'>
-            <h1 className="flex font-normal text-[90px] text-white ">Crush It</h1>
+            <h1 className="flex font-Fredoka font-bold text-[60px] text-white ">Crush It</h1>
             <Image src={CrushItLogo} alt='Crush It Logo' width={600} height={600}/>
           </div>
           <div className="flex h-[80%] w-[60%] z-2 mr-[-50%] shadow-2xl">
             <div className="flex bg-white rounded-[10px] flex-1 flex-col p-[10%] space-y-[5%]">
-              <h1 className="flex font-bold text-[60px] text-crush-it-black">{variant === 'login' ? 'Sign In' : 'Sign Up'}</h1>
+              <h1 className="flex font-bold text-[30px] text-crush-it-black">{variant === 'login' ? 'Sign In' : 'Sign Up'}</h1>
               <Input
-                inputFieldClassName="flex-1"
+                inputFieldClassName="flex-1 text-[16px] font-[500]"
+                labelClassName="text-[14px]"
                 image={EmailIcon}
                 alt="Email Icon"
                 label="Email/username"
@@ -70,7 +71,8 @@ const Auth = () => {
                 value={email}
               />
               <Input
-                inputFieldClassName="flex-1"
+                inputFieldClassName="flex-1 text-[16px] font-[500]"
+                labelClassName="text-[14px]"
                 image={LockIcon}
                 alt="Lock Icon"
                 label="Password"
@@ -80,7 +82,8 @@ const Auth = () => {
                 value={password}
               />
               {variant === 'register' && (<Input
-                inputFieldClassName="flex-1"
+                inputFieldClassName="flex-1 text-[16px] font-[500]"
+                labelClassName="text-[14px]"
                 image={LockIcon}
                 alt="Lock Icon"
                 label="Confirm Password"
@@ -96,7 +99,7 @@ const Auth = () => {
                   hover:from-sky-500 hover:to-blue-600 text-white text-[18px] font-bold py-2 px-4 
                   rounded-[16px] ">{variant === 'login' ? 'Sign In' : 'Sign Up'}</button>
               </div>
-              <div className="flex bg-crush-it-grey rounded-[10px] p-5 justify-center items-end">
+              <div className="flex bg-crush-it-grey rounded-[16px] p-5 justify-center items-end">
                 <p>
                   {variant === 'login' ? 'First time using Crush It? ' : 'Already have an account? '}
                   <span className='text-crush-it-blue hover:underline cursor-pointer' onClick={toggleVariant}>

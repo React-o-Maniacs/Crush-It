@@ -122,17 +122,15 @@ const Profile = () => {
       } else {
         toast.error('Failed to save pomodoro settings!');
         console.error('Failed to save pomodoro settings');
-      }
-
-      const validationError = validatePassword(newPassword);
-      if (validationError) {
-        toast.error('Failed to validate password!');
-        console.error(validationError);
-        return;
-      }
-  
+      } 
       // Change password if fields are filled out
       if (currentPassword && newPassword && confirmPassword) {
+        const validationError = validatePassword(newPassword);
+        if (validationError) {
+          toast.error('Failed to validate password!');
+          console.error(validationError);
+          return;
+        }
         if (newPassword !== confirmPassword) {
           toast.error('New password and confirm new password do not match!');
           console.error('New password and confirm new password do not match');
@@ -191,7 +189,7 @@ const Profile = () => {
               <ProfileAvatar name={(user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}`.trim() : user?.userName || ""}/>
             </div>
           </div>
-          <h2 className="text-2xl font-semibold mt-9 mx-4">User Info</h2>
+          <h2 className="text-[24px] font-semibold mt-9 mx-4">User Info</h2>
           <div className="bg-white p-4 shadow-md my-4 mx-4 rounded-lg">
             <div className="flex space-x-4">
               <div className="flex-1">
@@ -204,6 +202,7 @@ const Profile = () => {
                   type="text"
                   value={FirstName}
                   inputFieldClassName="flex-1"
+                  labelClassName="text-[18px]"
                 />
               </div>
               <div className="flex-1">
@@ -216,11 +215,12 @@ const Profile = () => {
                   type="text"
                   value={LastName}
                   inputFieldClassName="flex-1"
+                  labelClassName="text-[18px]"
                 />
               </div>
             </div>
           </div>
-          <h2 className="text-2xl font-semibold mt-9 mx-4">Change Password</h2>
+          <h2 className="text-[24px] font-semibold mt-9 mx-4">Change Password</h2>
           <div className="bg-white p-4 shadow-md my-4 mx-4 rounded-lg">
             <div className="flex flex-row space-x-4">
               <div className="flex-1">
@@ -235,6 +235,7 @@ const Profile = () => {
                   value={currentPassword}
                   alt="Current Password"
                   inputFieldClassName="flex-1"
+                  labelClassName="text-[18px]"
                 />
               </div>
               <div className="flex-1">
@@ -249,6 +250,7 @@ const Profile = () => {
                   value={newPassword}
                   alt="New Password"
                   inputFieldClassName="flex-1"
+                  labelClassName="text-[18px]"
                 />
               </div>
               <div className="flex-1">
@@ -263,11 +265,12 @@ const Profile = () => {
                   value={confirmPassword}
                   alt="Confirm New Password"
                   inputFieldClassName="flex-1"
+                  labelClassName="text-[18px]"
                 />
               </div>
             </div>
           </div>
-          <h2 className="text-2xl font-semibold mt-9 mx-4">Pomodoro Timer (Minutes)</h2>
+          <h2 className="text-[24px] font-semibold mt-9 mx-4">Pomodoro Timer (Minutes)</h2>
           <div className="bg-white p-4 shadow-md my-4 mx-4 rounded-lg">
             <div className="flex flex-row space-x-4">
               <div className="flex-1">
@@ -280,6 +283,7 @@ const Profile = () => {
                   type="number"
                   value={pomodoroTime}
                   inputFieldClassName="flex-1"
+                  labelClassName="text-[18px]"
                 />
               </div>
               <div className="flex-1">
@@ -292,6 +296,7 @@ const Profile = () => {
                   type="number"
                   value={shortBreakTime}
                   inputFieldClassName="flex-1"
+                  labelClassName="text-[18px]"
                 />
               </div>
               <div className="flex-1">
@@ -304,6 +309,7 @@ const Profile = () => {
                   type="number"
                   value={longBreakTime}
                   inputFieldClassName="flex-1"
+                  labelClassName="text-[18px]"
                 />
               </div>
             </div>

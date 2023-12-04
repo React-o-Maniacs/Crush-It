@@ -57,7 +57,7 @@ const Dropdown: React.FC<DropdownProps> = ({ options, onChange, widthStyle, sele
       </button>
       
       {isOpen && (
-        <div className={`absolute bg-white border border-crush-it-blue shadow-md z-10 rounded-[5px] p-2 ${options.length > 5 ? 'max-h-72 overflow-y-auto w-full' : 'w-full'}`}>
+        <div className={`absolute bg-white border border-crush-it-blue shadow-md z-10 rounded-[5px] p-2 ${options.length > 5 ? 'max-h-72 overflow-y-scroll custom-scrollbar w-full' : 'w-full'}`}>
           <ul>
             {options.map((option) => (
               <li

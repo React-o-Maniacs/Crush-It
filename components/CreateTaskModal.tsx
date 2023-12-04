@@ -14,7 +14,7 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isVisible, onClose, d
   const [title, setTaskTitle] = useState<string>('');
   const [numOfPomodoroTimers, setPomodoro] = useState<number>(1);
   const [notes, setNotes] = useState<string>('');
-  const [priority, setPriority] = useState<string>('');
+  const [priority, setPriority] = useState<string>('Important');
 
   if (!isVisible) return null;
 
@@ -126,9 +126,8 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isVisible, onClose, d
               onChange={(e) => setPriority(e.target.value)}
               className='ml-2 border-gray-400 border-[1px] rounded-[4px] p-2'
             >
-              <option value="">Select Priority</option>
-              <option value="Top Priority">Top Priority</option>
               <option value="Important">Important</option>
+              <option value="Top Priority">Top Priority</option>
               <option value="Other">Other</option>
             </select>
           </div>
