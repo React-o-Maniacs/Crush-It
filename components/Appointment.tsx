@@ -10,6 +10,7 @@ export interface AppointmentData {
   title: string;
   startTime: number; // Assuming this is an hour in 24-hour format
   endTime: number;
+  date: string;
 }
 
 const Appointment: React.FC<AppointmentData> = ({ id, title, startTime, endTime }) => {

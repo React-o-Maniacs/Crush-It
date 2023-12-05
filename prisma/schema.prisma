@@ -86,6 +86,7 @@ model Appointment {
   title String
   startTime Int
   endTime Int
+  date String
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

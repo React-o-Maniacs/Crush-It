@@ -312,6 +312,11 @@ export default function Home() {
       setTimerModalTask(selectedTask);
     };
 
+    const filteredAppointments = appointments.filter(appointment => {
+      // Check if the appointment's date matches the selected date
+      return appointment.date === date;
+    });
+
     return (
       <>
         <Toaster position="top-right" />
@@ -387,14 +392,17 @@ export default function Home() {
                     <span className="text-md pl-4">{`${hour % 12 || 12} ${hour >= 12 ? 'PM' : 'AM'}`}</span>
                   </div>
                 ))}
+                
+                
                 {/* Render Appointments */}
-                {appointments.map(appointment => (
+                {filteredAppointments.map(appointment => (
                   <Appointment 
                     key={appointment.id} 
                     id={appointment.id} 
                     title={appointment.title} 
                     startTime={appointment.startTime} 
                     endTime={appointment.endTime} 
+                    date={appointment.date}
                   />
                 ))}
               </div>
