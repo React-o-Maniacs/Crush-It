@@ -106,6 +106,8 @@ const Task: React.FC<TaskProps> = ({ task, onTaskTitleClick, onTaskUpdate }) => 
   const [numOfPomodoroTimers, setNumOfPomodoroTimers] = useState(task.numOfPomodoroTimers);
   const [isEditingNotes, setIsEditingNotes] = useState(false);
   const [taskNotes, setTaskNotes] = useState(task.notes);
+  const [isEditingTimers, setIsEditingTimers] = useState(false);
+
 
   const handleToggleExpand = () => {
     setIsExpanded(!isExpanded);
@@ -203,12 +205,13 @@ const Task: React.FC<TaskProps> = ({ task, onTaskTitleClick, onTaskUpdate }) => 
               Number of Pomodoro Timers (30 mins each)
             </div>
             <button onClick={handleClickForPomo} className="p-1 rounded flex items-center">
-              {!isClickedForPomo ? (
+              {!isEditingTimers ? (
                 <>
                   <div className="font-bold text-lg text-crush-it-orange ml-2 mr-4 rounded">{numOfPomodoroTimers}</div>
                   <Image
                   src={pencilIcon}
                   alt="Pencil Icon For Pomo"
+                  onClick={() => setIsEditingTimers(true)}
                   />
                 </>
               ) : (
@@ -216,22 +219,22 @@ const Task: React.FC<TaskProps> = ({ task, onTaskTitleClick, onTaskUpdate }) => 
                   <Image 
                     src={plusSquare} 
                     alt="plus button" 
-                    onClick={() => {
-                      incrementTimers();
-                      handleUpdateTask(task.id, numOfPomodoroTimers + 1, taskNotes);
-                    }}
-                   />
+                    onClick={incrementTimers}
+                  />
                   <div className="font-bold text-lg text-crush-it-orange ml-2 mr-2 rounded">{numOfPomodoroTimers}</div>
                   <Image 
                     src={minusSquare} 
                     alt="minus button" 
                     className="mr-2" 
-                    onClick={() => {
-                      decrementTimers();
-                      handleUpdateTask(task.id, numOfPomodoroTimers - 1, taskNotes);
-                    }} 
+                    onClick={decrementTimers}
                   />
-                  <div className="relative flex items-center justify-center">
+                  <div 
+                    className="relative flex items-center justify-center"
+                    onClick={() => {
+                      handleUpdateTask(task.id, numOfPomodoroTimers, taskNotes);
+                      setIsEditingTimers(false);
+                    }}
+                  >
                     <Image src={blueRectangle} alt="Background" className="w-full h-auto" />
                     <Image src={CheckIcon} alt="Foreground" className="absolute w-2/4 h-auto" />
                   </div>
