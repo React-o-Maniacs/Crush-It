@@ -13,6 +13,9 @@ import AddTaskIcon from '../public/images/add-task.svg'
 import Task, { TaskData } from "@/components/Task";
 import TimerModal from "@/components/TimerModal";
 import Appointment, { AppointmentData } from "@/components/Appointment";
+import React from 'react';
+import { useQuery, QueryClient, QueryClientProvider } from 'react-query';
+    
 
 function getDaysInMonth(year: number, month: number): number[] {
   // Check if it's a leap year (divisible by 4, not divisible by 100 unless also divisible by 400)
@@ -279,7 +282,7 @@ export default function Home() {
   const [appointments, setAppointments] = useState<AppointmentData[]>([]);
     const fetchAppointments = async () => {
       try {
-        const response = await fetch('/api/retrieveAppointment');
+        const response = await fetch('/api/googleCalendar');
         if (response.ok) {
           const data = await response.json();
           setAppointments(data);
@@ -296,6 +299,7 @@ export default function Home() {
     }, []);
 
     console.log(appointments);
+
     function calculateAppointmentPosition(startTime: number) {
       // Convert start time to pixels (1 hour = 60 pixels)
       return startTime * 60;
@@ -311,6 +315,33 @@ export default function Home() {
       setShowTimerModal(true);
       setTimerModalTask(selectedTask);
     };
+
+    const queryClient = new QueryClient();
+    
+    const CalendarComponent: React.FC = () => {
+      const fetchCalendarEvents = async () => {
+        const response = await fetch('/api/calendar');
+        const data = await response.json();
+        console.log('API Response:', data);
+        return data;
+      };
+    
+      const { data, isLoading } = useQuery('calendarEvents', fetchCalendarEvents);
+
+    
+    return (
+      <div>
+        <h2>Google Calendar Events</h2>
+        {data && data.events && (
+          <ul>
+            {data.events.map((event: any) => (
+              <li key={event.id}>{event.summary}</li>
+            ))}
+          </ul>
+        )}
+      </div>
+    );
+   };
 
     return (
       <>
@@ -388,15 +419,11 @@ export default function Home() {
                   </div>
                 ))}
                 {/* Render Appointments */}
-                {appointments.map(appointment => (
-                  <Appointment 
-                    key={appointment.id} 
-                    id={appointment.id} 
-                    title={appointment.title} 
-                    startTime={appointment.startTime} 
-                    endTime={appointment.endTime} 
-                  />
-                ))}
+                <QueryClientProvider client={queryClient}>
+                  <div>
+                    <CalendarComponent />
+                  </div>
+                </QueryClientProvider>
               </div>
             </div>
           </div>
