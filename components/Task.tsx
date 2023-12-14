@@ -25,6 +25,7 @@ export interface TaskData {
   date: string;
   status: TaskStatus
   numOfPomodoroTimers: number;
+  remainingPomodoroTimers: number;
 }
 
 
