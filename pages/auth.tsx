@@ -63,7 +63,7 @@ const Auth = () => {
     else {
       return true;
     }
-  })
+  }, [email, password, confirmPassword]);
 
   const register = useCallback(async () => {
     try {
