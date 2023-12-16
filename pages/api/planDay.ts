@@ -79,6 +79,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     });
 
+    let myVariable = 1;
+
+    if (importantCount === 0) {
+        myVariable = 0;
+    }
+
     let topPriorityCountCurrent = topPriorityCount;
     let importantCountCurrent = importantCount;
 
@@ -113,7 +119,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           } else if (task.priority === 'Important' && topPriorityCountCurrent === 3) {
             newPriority = 'Important';
             importantCountCurrent++;
-          } else if (importantCountCurrent === 0 && task.priority === 'Other') {
+          } else if (myVariable === 0 && task.priority === 'Other') {
             newPriority = 'Important';
             importantCountCurrent++;
           } else {
