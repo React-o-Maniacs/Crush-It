@@ -4,6 +4,7 @@ import CrushItLogo from '../public/images/crush-it-logo.svg';
 import { signOut } from 'next-auth/react';
 import logout from '../public/images/logout.svg';
 import { useRouter } from "next/router";
+import toast, { Toaster } from 'react-hot-toast';
 
 
 
@@ -19,6 +20,36 @@ const SideBanner = () => {
     await signOut({ callbackUrl: '/' });
   };
   
+  const handlePlanDayClick = async () => {
+    try {
+      const response = await fetch('/api/planDay', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+  
+      if (response.ok) {
+        const result = await response.json();
+        const { tasksFromPreviousDay } = result;
+  
+        toast.success('Successfully planned day!');
+        
+        // Handle tasksFromPreviousDay as needed
+        console.log('Tasks from previous day:', tasksFromPreviousDay);
+
+        router.reload();
+  
+      } else {
+        toast.error('Error planning day');
+        console.error('Error planning day');
+      }
+    } catch (error) {
+      toast.error('Error planning day');
+      console.error('Error:', error);
+    }
+  };
+
   return (
     <div className="flex bg-crush-it-black justify-center max-w-[10%] min-h-screen p-5">
       <div className='flex flex-col items-center gap-y-[5%]'>
@@ -26,7 +57,7 @@ const SideBanner = () => {
         <div className="bg-crush-it-line h-[2px] w-[70%]"/>
         <Image src={CrushItLogo} alt='Crush It Logo' width={150} height={150}/>
         <p className="text-white font-bold text-center text-[20px]">It's time to plan your day!</p>
-        <button className="h-[54px] w-[158px] opacity-100 hover:bg-black text-white text-[18px] font-bold rounded-[14px] border-x border-y">Plan Day</button>
+        <button onClick={handlePlanDayClick} className="h-[54px] w-[158px] opacity-100 hover:bg-black text-white text-[18px] font-bold rounded-[14px] border-x border-y">Plan Day</button>
         <div className="mt-auto">
           <div className="mt-[-100px]">
             <button
