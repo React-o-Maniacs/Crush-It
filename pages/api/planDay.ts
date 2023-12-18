@@ -53,7 +53,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
     // Update the status of the tasks from the previous day to "Rolled Over"
-    await Promise.all(tasksFromPreviousDay.map(task =>
+    await Promise.all(tasksFromPreviousDay.map((task: { status: string; id: any; }) =>
       task.status !== 'Complete'
         ? prismadb.task.update({
           where: { id: task.id },
@@ -98,13 +98,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Create the new tasks
     const tasksForCurrentDay = tasksFromPreviousDay
-      .filter(task => task.status !== 'Complete')
-      .sort((a, b) => {
+      .filter((task: { status: string; }) => task.status !== 'Complete')
+      .sort((a: { priority: string; }, b: { priority: string; }) => {
         // Sort tasks by priority: Top Priority > Important > Other
         const priorities = ['Top Priority', 'Important', 'Other'];
         return priorities.indexOf(a.priority) - priorities.indexOf(b.priority);
       })
-      .map(task => {
+      .map((task: { [x: string]: any; priority?: any; id?: any; }) => {
         const { id, ...taskWithoutID } = task; // Remove the id from the task
         let newPriority;
 
