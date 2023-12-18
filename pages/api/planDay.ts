@@ -100,7 +100,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const tasksForCurrentDay = tasksFromPreviousDay
       .filter((task: { status: string; }) => task.status !== 'Complete')
       .sort((a: { priority: string; }, b: { priority: string; }) => {
-        // Sort tasks by priority: Top Priority > Important > Other
+        // Sort tasks by priority: Top Priority > Important > Othery
         const priorities = ['Top Priority', 'Important', 'Other'];
         return priorities.indexOf(a.priority) - priorities.indexOf(b.priority);
       })
@@ -140,7 +140,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Save the tasks for the current day
     const savedTasksForCurrentDay = await prismadb.task.createMany({
-      data: tasksForCurrentDay,
+      userId: currentUser.id,
+      title: tasksFromPreviousDay.title, // Replace with the actual task title
+      notes: tasksFromPreviousDay.notes, // Replace with the actual task notes
+      numOfPomodoroTimers: tasksFromPreviousDay.numOfPomodoroTimers, // Replace with the actual number of Pomodoro timers
+      date: formattedCurrentDate,
+      status: 'Not Started', // Set status to 'Not Started'
     });
 
     console.log("Tasks transferred to the current day:", savedTasksForCurrentDay);
