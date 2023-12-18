@@ -67,7 +67,7 @@ const Auth = () => {
 
   const register = useCallback(async () => {
     try {
-      const noErrors = await validateRegister(email, password, confirmPassword);
+      const noErrors = await validateRegister();
       if (!noErrors) {
         return;
         // Currently, I'm not viewing for email validation since the user can choose to not submit an email for username
