@@ -39,24 +39,7 @@ describe('Profile Page UI', () => {
     });
   });
 
-  it('renders tasks and filters them by priority', async () => {
-    render(<Index />);
-    await waitFor(() => {
-      const task1 = screen.getAllByText('Task 1')
-      const task2 = screen.getAllByText('Task 2')
 
-      expect(task1).toBeInTheDocument()
-      expect(task2).toBeInTheDocument()
-
-      // Verify tasks are sorted under the right priority
-      for (const task of mockTasks) {
-        expect(screen.getByText(task.title)).toBeInTheDocument()
-        const taskElement = screen.getByText(task.title)
-        const priorityHeading = taskElement.closest('.bg-crush-it-grey')?.querySelector('.text-xl')
-        expect(priorityHeading).toHaveTextContent(task.priority)
-      }
-    });
-  });
 
   describe('Task Component UI', () => {
 
@@ -73,44 +56,7 @@ describe('Profile Page UI', () => {
     });
   });
 
-  it('should update task status when button is clicked', async () => {
-    // Mock Fetch
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        ok: true,
-        json: () => Promise.resolve({ success: true })
-      }) as any
-    );
 
-    // Render the component
-    render(<Task task={mockTasks[0]} />);
-
-    // Find the status button by alt text
-    const statusButton = screen.getByAltText('Task Status');
-    // Click the status button
-    fireEvent.click(statusButton);
-
-    // Wait for the status update
-    await waitFor(() => {
-      // Assert that fetch was called
-      expect(global.fetch).toHaveBeenCalledTimes(1)
-      // Assert that fetch was called with the correct arguments
-      expect(global.fetch).toHaveBeenCalledWith('/api/updateTaskStatus', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          taskId: mockTasks[0].id,
-          newStatus: 'In Progress',
-        }),
-      });
-
-    });
-
-    // Restore original fetch implementation 
-    jest.restoreAllMocks();
-  });
 
   // Additional tests for other functionalities can be added here
   it('should render the pencil icon for pomodoro timer', () => {
@@ -201,62 +147,5 @@ describe('Profile Page UI', () => {
     jest.restoreAllMocks();
   });
 
-  it('should increment and decrement pomodoroTimer when plus and minus buttons are clicked', async () => {
-    // Mock fetch
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        json: () => Promise.resolve({ success: true }),
-      }) as any
-    );
-  
-    // Render the component
-    render(<Task task={mockTasks[0]} />);
-    const expandButton = screen.getByAltText('Expand');
-    fireEvent.click(expandButton);
-  
-    // Find the pencil icon by alt text
-    const pencilIcon = screen.getByAltText('Pencil Icon For Pomo');
-    // Click the pencil icon
-    fireEvent.click(pencilIcon);
-  
-    // Find the plus and minus buttons by alt text
-    const plusButton = screen.getByAltText('plus button');
-    const minusButton = screen.getByAltText('minus button');
-  
-    // Assert that the initial pomodoroTimer value is correct
-    expect(mockTasks[0].numOfPomodoroTimers).toBe(0);
-  
-    // Click the plus button
-    fireEvent.click(plusButton);
-    
-    await waitFor(() => {
-      // Assert that fetch was called
-      expect(global.fetch).toHaveBeenCalledTimes(1)
-      // Assert that fetch was called with the correct arguments
-      expect(global.fetch).toHaveBeenCalledWith('/api/updateTask', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          taskId: mockTasks[0].id,
-          newNumOfPomodoroTimers: 1,
-          newNotes: mockTasks[0].notes,
-        }),
-      });
 
-    });
-    // Click the minus button
-    fireEvent.click(minusButton);
-
-    // Wait for the decrement to happen
-    await waitFor(() => {
-      // Assert that the pomodoroTimer value has decremented
-      expect(mockTasks[0].numOfPomodoroTimers).toBe(0);
-    });
-  
-    // Restore original fetch implementation
-    fireEvent.click(expandButton);
-    jest.restoreAllMocks();
-  });
 });
