@@ -63,7 +63,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Find available time slots
 
     let currentHour = new Date().getHours();
-    let startTime = currentHour + 1;
+    let startTime = 6;
     let endTime = startTime;
     
     for (const task of tasksForCurrentDay) {
@@ -72,11 +72,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           taskTotalTime = (task.numOfPomodoroTimers * pomodoroTime)/60;
         }
         
-        if (currentHour < 6) {
-            let startTime = 6;
-        } else {
-            let startTime = currentHour + 1
-        }
+ 
+        let startTime = 6;
         let endTime = startTime + taskTotalTime;
     
         while (endTime <= 20) {

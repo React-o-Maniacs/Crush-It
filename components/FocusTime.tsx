@@ -58,7 +58,7 @@ const FocusTime: React.FC<FocusTimeData> = ({ id, title, notes, startTime, endTi
   return (
     <div
       data-testid="focus-time"
-      className={`absolute left-0 right-0 ml-20 mr-2 bg-white p-3 border border-crush-it-blue ${hasEnded ? 'bg-gray-200' : 'bg-white'}`}
+      className={`absolute left-0 right-0 ml-20 mr-2 bg-white p-3 border border-crush-it-blue ${hasEnded ? 'bg-gray-300' : 'bg-white'}`}
       style={focusTimeStyle}
     >
       <div className="flex items-center">
