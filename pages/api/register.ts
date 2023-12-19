@@ -6,12 +6,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method !== 'POST') {
     return res.status(405).end();
   }
-
+  
   try {
-    const { email, password } = req.body;
-    
+    const { email, password, confirmPassword } = req.body;
+
     if(!email || !password){
       throw new Error('Email and password required');
+    }
+
+    if(!password || !confirmPassword){
+      throw new Error('Password must match in both fields');
     }
 
     const existingUser = await prismadb.user.findUnique({

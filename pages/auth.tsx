@@ -31,12 +31,52 @@ const Auth = () => {
       toast.error('Failed to login!');
     }
   }, [email, password]);
+  
+  const validateRegister = useCallback(async () => {
+    var problems = 0;
+    if (!email || !password || !confirmPassword) {
+      toast.error('Please enter missing fields.')
+      problems = problems + 1;
+    }
+    if (password.length < 12) {
+      toast.error('Password should be at least 12 characters long.');
+      problems = problems + 1;
+    }
+    if (password != confirmPassword) {
+      toast.error('Both password fields should match.');
+      problems = problems + 1;
+    }
+    const conditions = [
+      /[A-Z]/.test(password), // Uppercase letter
+      /[a-z]/.test(password), // Lowercase letter
+      /[0-9]/.test(password), // Number
+      /[^A-Za-z0-9]/.test(password) // Special character (no spaces)
+    ];
+    const trueConditions = conditions.filter(Boolean).length;
+    if (trueConditions < 2) {
+      toast.error('Password should meet at least two of the following: include an uppercase letter, a lowercase letter, a number, or a special character (no spaces).');
+      problems = problems + 1;
+    }
+    if (problems > 0) {
+      return false;
+    }
+    else {
+      return true;
+    }
+  }, [email, password, confirmPassword]);
 
   const register = useCallback(async () => {
     try {
+      const noErrors = await validateRegister();
+      if (!noErrors) {
+        return;
+        // Currently, I'm not viewing for email validation since the user can choose to not submit an email for username
+      }
+
       await axios.post('/api/register', {
         email,
-        password
+        password,
+        confirmPassword
       });
 
       toast.success('Successfully registered!');
@@ -45,7 +85,7 @@ const Auth = () => {
       toast.error('Failed to register!');
       console.log(error);
     }
-  }, [email, password, login]);
+  }, [email, password, confirmPassword, login]);
 
   return (
     <>
