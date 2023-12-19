@@ -13,6 +13,7 @@ import AddTaskIcon from '../public/images/add-task.svg'
 import Task, { TaskData } from "@/components/Task";
 import TimerModal from "@/components/TimerModal";
 import Appointment, { AppointmentData } from "@/components/Appointment";
+import CreateAppointmentModal from "@/components/CreateAppointmentModal";
 
 function getDaysInMonth(year: number, month: number): number[] {
   // Check if it's a leap year (divisible by 4, not divisible by 100 unless also divisible by 400)
@@ -109,6 +110,7 @@ export default function Home() {
   };
 
   const [showCreateTaskModal, setShowCreateTaskModal] = useState(false);
+  const [showCreateAppointmentModal, setShowCreateAppointmentModal] = useState(false);
   const [showTimerModal, setShowTimerModal] = useState(false);
   const [timerModalTask, setTimerModalTask] = useState<TaskData | null>(null);
 
@@ -312,6 +314,20 @@ export default function Home() {
       setTimerModalTask(selectedTask);
     };
 
+    const filteredAppointments = appointments.filter((appointment) => {
+      // Check if the appointment's date matches the selected date
+      if (appointment.date === date) {
+        return true;
+      }
+  
+      // Check if it's a recurring appointment with "daily" recurrence
+      if (appointment.recurring) {
+        return true;
+      }
+  
+      return false;
+    });
+
     return (
       <>
         <Toaster position="top-right" />
@@ -379,7 +395,15 @@ export default function Home() {
             </div>
             {/* Appointments Section 45% */}
             <div className="flex-1 ml-4 min-w-[45%]">
+            <div className="flex items-center">
               <h1 className="text-3xl font-bold mb-2 py-1">Appointments</h1>
+              <button
+                  className="ml-2 border-3 border-solid border-white p-2"
+                  onClick={() => setShowCreateAppointmentModal(true)}
+                >
+                  <Image src={AddTaskIcon} alt="Add Task Icon" />
+                </button>
+              </div>
               <div className="bg-white shadow rounded-[10px] p-2 relative overflow-y-scroll custom-scrollbar min-h-[640px]">
                 {/* 24-hour timeline */}
                 {[...Array(24)].map((_, hour) => (
@@ -387,14 +411,18 @@ export default function Home() {
                     <span className="text-md pl-4">{`${hour % 12 || 12} ${hour >= 12 ? 'PM' : 'AM'}`}</span>
                   </div>
                 ))}
+                
+                
                 {/* Render Appointments */}
-                {appointments.map(appointment => (
+                {filteredAppointments.map(appointment => (
                   <Appointment 
                     key={appointment.id} 
                     id={appointment.id} 
                     title={appointment.title} 
                     startTime={appointment.startTime} 
                     endTime={appointment.endTime} 
+                    date={appointment.date}
+                    recurring={appointment.recurring}
                   />
                 ))}
               </div>
@@ -403,6 +431,9 @@ export default function Home() {
       </div>
       {showCreateTaskModal && (
         <CreateTaskModal isVisible={showCreateTaskModal} onClose={() => setShowCreateTaskModal(false)} date={date} onTaskAdded={fetchTasks} />
+      )}
+      {showCreateAppointmentModal && (
+        <CreateAppointmentModal isVisible={showCreateAppointmentModal} onClose={() => setShowCreateAppointmentModal(false)} initialDate={date} onAppointmentAdded={fetchAppointments} />
       )}
       {showTimerModal && (
         <TimerModal isVisible={showTimerModal} onClose={() => setShowTimerModal(false)} task={timerModalTask} user={user} />
