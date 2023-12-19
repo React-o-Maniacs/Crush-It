@@ -14,6 +14,7 @@ import Task, { TaskData } from "@/components/Task";
 import TimerModal from "@/components/TimerModal";
 import Appointment, { AppointmentData } from "@/components/Appointment";
 import CreateAppointmentModal from "@/components/CreateAppointmentModal";
+import FocusTime, { FocusTimeData } from "@/components/FocusTime";
 
 function getDaysInMonth(year: number, month: number): number[] {
   // Check if it's a leap year (divisible by 4, not divisible by 100 unless also divisible by 400)
@@ -298,6 +299,26 @@ export default function Home() {
     }, []);
 
     console.log(appointments);
+
+    const [focusTime, setFocusTime] = useState<FocusTimeData[]>([]);
+    const fetchFocusTime = async () => {
+      try {
+        const response = await fetch('/api/retrieveFocusTime');
+        if (response.ok) {
+          const data = await response.json();
+          setFocusTime(data);
+        } else {
+          console.error('Failed to fetch appointments');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    useEffect(() => {
+      fetchFocusTime();
+    }, []);
+
     function calculateAppointmentPosition(startTime: number) {
       // Convert start time to pixels (1 hour = 60 pixels)
       return startTime * 60;
@@ -322,6 +343,16 @@ export default function Home() {
   
       // Check if it's a recurring appointment with "daily" recurrence
       if (appointment.recurring) {
+        return true;
+      }
+  
+      return false;
+    });
+
+
+    const filteredFocusTime = focusTime.filter((focusTime) => {
+      // Check if the appointment's date matches the selected date
+      if (focusTime.date === date) {
         return true;
       }
   
@@ -423,6 +454,19 @@ export default function Home() {
                     endTime={appointment.endTime} 
                     date={appointment.date}
                     recurring={appointment.recurring}
+                  />
+                ))}
+                {filteredFocusTime.map(focusTime => (
+                  <FocusTime 
+                    key={focusTime.id} 
+                    id={focusTime.id} 
+                    title={focusTime.title}
+                    notes={focusTime.notes}
+                    startTime={focusTime.startTime} 
+                    endTime={focusTime.endTime}
+                    numOfPomodoroTimers={focusTime.numOfPomodoroTimers}
+                    remainingNumOfPomodoros={focusTime.remainingNumOfPomodoros}
+                    date={focusTime.date}
                   />
                 ))}
               </div>
