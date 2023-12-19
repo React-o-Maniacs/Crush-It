@@ -22,9 +22,10 @@ model User {
   updatedAt DateTime @updatedAt
   tasks Task[]
   appointments Appointment[]
-  pomodoro Int?
-  shortBreak Int?
-  longBreak Int?
+  focusTimes FocusTime[]
+  pomodoro Int @default(25)
+  shortBreak Int @default(5)
+  longBreak Int @default(30)
   sessions Session[]
   account Account[]
 }
@@ -89,6 +90,20 @@ model Appointment {
   endTime Int
   date String
   recurring Boolean
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model FocusTime {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  title String
+  notes String
+  startTime Int
+  endTime Int
+  numOfPomodoroTimers Int
+  remainingNumOfPomodoros Int
+  date String
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

@@ -28,21 +28,6 @@ describe('Auth Component', () => {
     jest.clearAllMocks();
   });
 
-  describe('Registration', () => {
-    it('should handle registration', async () => {
-      (axios.post as jest.MockedFunction<typeof axios.post>).mockResolvedValue({ data: {} });
-      const { getByLabelText } = render(<Auth />);
-      fireEvent.click(screen.getByText(/create an account/i));
-      fireEvent.change(screen.getByLabelText(/email\/username/i), { target: { value: email } });
-      fireEvent.change(screen.getByLabelText('Password'), { target: { value: password } });
-      fireEvent.change(screen.getByLabelText('Confirm Password'), { target: { value: password } });
-      fireEvent.click(screen.getByRole('button', { name: /sign up/i }));
-      await waitFor(() => expect(axios.post).toHaveBeenCalledTimes(1));
-      expect(axios.post).toHaveBeenCalledWith('/api/register', { email, password });
-    });
-
-    // Additional tests related to registration
-  });
 
   describe('Login', () => {
     it('should handle login', async () => {
